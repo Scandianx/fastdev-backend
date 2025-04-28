@@ -1,4 +1,4 @@
-package br.com.scandianx.fastdev.service;
+package br.com.scandianx.fastdev.service.impl;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,15 +14,15 @@ import org.springframework.stereotype.Service;
 import br.com.scandianx.fastdev.DTOs.AuthenticationDTO;
 import br.com.scandianx.fastdev.DTOs.LoginResponseDTO;
 import br.com.scandianx.fastdev.DTOs.RegisterDTO;
-import br.com.scandianx.fastdev.model.Usuario;
 import br.com.scandianx.fastdev.model.UsuarioRole;
 import br.com.scandianx.fastdev.model.Visualizador;
 import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
 import br.com.scandianx.fastdev.repository.interfaces.VisualizadorRepository;
 import br.com.scandianx.fastdev.security.TokenService;
+import br.com.scandianx.fastdev.service.interfaces.AuthenticationService;
 
 @Service
-public class AuthenticationService {
+public class AuthenticationServiceImpl implements AuthenticationService{
     @Autowired
     private AuthenticationManager authenticationManager;
     @Autowired
@@ -50,7 +50,7 @@ public class AuthenticationService {
     }
 
     
-    public ResponseEntity<String> registerVisualizador(RegisterDTO data){
+    public ResponseEntity<String> register(RegisterDTO data){
         if(this.usuarioRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().body("Esse email já foi cadastrado no sistema!");
 
         String eP = new BCryptPasswordEncoder().encode(data.password());

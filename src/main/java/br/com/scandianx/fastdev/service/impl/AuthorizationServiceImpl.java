@@ -10,7 +10,7 @@ import br.com.scandianx.fastdev.repository.impl.UsuarioRepositoryImpl;
 import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
 
 @Service
-public class AuthorizationService implements UserDetailsService {
+public class AuthorizationServiceImpl implements UserDetailsService {
     @Autowired
     private UsuarioRepositoryImpl usuarioRepository;
 

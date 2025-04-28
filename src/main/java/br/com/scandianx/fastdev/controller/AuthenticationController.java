@@ -3,8 +3,9 @@ package br.com.scandianx.fastdev.controller;
 import br.com.scandianx.fastdev.DTOs.AuthenticationDTO;
 import br.com.scandianx.fastdev.DTOs.LoginResponseDTO;
 import br.com.scandianx.fastdev.DTOs.RegisterDTO;
-import br.com.scandianx.fastdev.service.AuthenticationService;
-import lombok.RequiredArgsConstructor;
+
+import br.com.scandianx.fastdev.service.interfaces.AuthenticationService;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,6 @@ public class AuthenticationController {
 
     @PostMapping("/register-visualizador")
     public ResponseEntity<String> registerVisualizador(@RequestBody RegisterDTO data) {
-        return authenticationService.registerVisualizador(data);
+        return authenticationService.register(data);
     }
 }
