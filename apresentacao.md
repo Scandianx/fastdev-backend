@@ -146,40 +146,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 }
 ```
 
-### 5.3 Configurações de Segurança
 
-```java
-@Configuration
-@EnableWebSecurity
-public class SecurityConfigurations {
-    @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authManager, SecurityFilter securityFilter) throws Exception {
-        return http
-            .csrf().disable()
-            .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-            .and()
-            .authorizeHttpRequests()
-                .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
-                .anyRequest().authenticated()
-            .and()
-            .authenticationManager(authManager)
-            .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
-            .build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration config) throws Exception {
-        return config.getAuthenticationManager();
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-}
-```
-
----
 
 ## 6. Facade Pattern: AuthenticationService
 

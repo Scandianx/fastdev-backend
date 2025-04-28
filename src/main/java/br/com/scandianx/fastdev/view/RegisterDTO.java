@@ -1,4 +1,4 @@
-package br.com.scandianx.fastdev.DTOs;
+package br.com.scandianx.fastdev.view;
 
 
 
