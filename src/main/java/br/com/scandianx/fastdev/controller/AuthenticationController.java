@@ -1,11 +1,9 @@
 package br.com.scandianx.fastdev.controller;
 
-import br.com.scandianx.fastdev.DTOs.AuthenticationDTO;
-import br.com.scandianx.fastdev.DTOs.LoginResponseDTO;
-import br.com.scandianx.fastdev.DTOs.RegisterDTO;
-
 import br.com.scandianx.fastdev.service.interfaces.AuthenticationService;
-
+import br.com.scandianx.fastdev.view.AuthenticationDTO;
+import br.com.scandianx.fastdev.view.LoginResponseDTO;
+import br.com.scandianx.fastdev.view.RegisterDTO;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;

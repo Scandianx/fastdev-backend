@@ -11,15 +11,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import br.com.scandianx.fastdev.DTOs.AuthenticationDTO;
-import br.com.scandianx.fastdev.DTOs.LoginResponseDTO;
-import br.com.scandianx.fastdev.DTOs.RegisterDTO;
 import br.com.scandianx.fastdev.model.UsuarioRole;
 import br.com.scandianx.fastdev.model.Visualizador;
 import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
 import br.com.scandianx.fastdev.repository.interfaces.VisualizadorRepository;
 import br.com.scandianx.fastdev.security.TokenService;
 import br.com.scandianx.fastdev.service.interfaces.AuthenticationService;
+import br.com.scandianx.fastdev.view.AuthenticationDTO;
+import br.com.scandianx.fastdev.view.LoginResponseDTO;
+import br.com.scandianx.fastdev.view.RegisterDTO;
 
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService{

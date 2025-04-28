@@ -13,8 +13,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import br.com.scandianx.fastdev.repository.UsuarioPortRepository;
-import br.com.scandianx.fastdev.repository.UsuarioRepository;
+import br.com.scandianx.fastdev.repository.impl.UsuarioRepositoryImpl;
+import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
 
 import java.io.IOException;
 
@@ -23,7 +23,7 @@ public class SecurityFilter extends OncePerRequestFilter {
     @Autowired
     TokenService tokenService;
     @Autowired
-    UsuarioPortRepository userRep;
+    UsuarioRepository userRep;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {

@@ -1,4 +1,4 @@
-package br.com.scandianx.fastdev.service;
+package br.com.scandianx.fastdev.service.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
