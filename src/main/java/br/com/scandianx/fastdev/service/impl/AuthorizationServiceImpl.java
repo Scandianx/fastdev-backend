@@ -7,7 +7,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import br.com.scandianx.fastdev.repository.impl.UsuarioRepositoryImpl;
-import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
+
 
 @Service
 public class AuthorizationServiceImpl implements UserDetailsService {
