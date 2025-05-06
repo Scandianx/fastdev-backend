@@ -1,10 +1,8 @@
 package br.com.scandianx.fastdev.model;
 
-
 import java.time.LocalDateTime;
 
 import jakarta.persistence.*;
-
 
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
@@ -19,17 +17,26 @@ public abstract class VideoAbstrato {
 
     private LocalDateTime dtCriacao = LocalDateTime.now();
 
-    
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private NivelAcesso nivelAcesso;
+
     public Long getId() {
         return id;
     }
 
-    
+    public NivelAcesso getNivelAcesso() {
+        return nivelAcesso;
+    }
+
+    public void setNivelAcesso(NivelAcesso nivelAcesso) {
+        this.nivelAcesso = nivelAcesso;
+    }
+
     public String getTitulo() {
         return titulo;
     }
 
-    
     public LocalDateTime getDtCriacao() {
         return dtCriacao;
     }
@@ -42,7 +49,5 @@ public abstract class VideoAbstrato {
         this.dtCriacao = dtCriacao;
     }
 
-    
-    
     public abstract String getUrl();
 }

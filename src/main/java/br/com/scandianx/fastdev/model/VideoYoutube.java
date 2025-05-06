@@ -17,4 +17,12 @@ public class VideoYoutube extends VideoAbstrato {
     public void setUrlYouTube(String urlYouTube) {
         this.urlYouTube = urlYouTube;
     }
+
+    public VideoYoutube(String urlYouTube) {
+        this.urlYouTube = urlYouTube;
+    }
+
+    public VideoYoutube() {
+    }
+    
 }

@@ -33,12 +33,21 @@ public abstract class Usuario implements UserDetails {
     private String nome;
     @Column(nullable = false, unique = true)
     private String login;
-    @Column(nullable = true)
+    @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
     private UsuarioRole role;
-
+    @Column(nullable = false)
+    private String telefone;
     
+    public String getTelefone() {
+        return telefone;
+    }
+
+    public void setTelefone(String telefone) {
+        this.telefone = telefone;
+    }
+
     public void setLogin(String login) {
         this.login = login;
     }
@@ -70,7 +79,7 @@ public abstract class Usuario implements UserDetails {
     public void setRole(UsuarioRole role) {
         this.role = role;
     }
-
+    public abstract boolean podeVisualizar(NivelAcesso acesso);
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if (this.role == UsuarioRole.ADMIN) {

@@ -1,6 +1,8 @@
 package br.com.scandianx.fastdev.service.impl;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,6 +13,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import br.com.scandianx.fastdev.components.UsuarioObserver;
 import br.com.scandianx.fastdev.model.UsuarioRole;
 import br.com.scandianx.fastdev.model.Visualizador;
 import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
@@ -31,6 +34,8 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     private UsuarioRepository usuarioRepository;
     @Autowired
     private TokenService tokenService;
+    @Autowired
+    private List<UsuarioObserver> observadores;
 
     
     public ResponseEntity<LoginResponseDTO> login(AuthenticationDTO data){
@@ -60,7 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         visualizador.setNomeCompleto(data.nomeCompleto());
         visualizador.setPassword(eP);
         visualizador.setRole(UsuarioRole.USER);
-
+        observadores.forEach(obs -> obs.notificarNovoUsuario(visualizador));
         visualizadorRepository.save(visualizador);
 
         return ResponseEntity.ok().body("Você foi cadastrado com sucesso!");

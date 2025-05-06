@@ -9,6 +9,8 @@ import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
 
 @Repository
 public interface UsuarioRepositoryImpl extends JpaRepository<Usuario, Long>, UsuarioRepository {
-    UserDetails findByLogin(String login);
+    Usuario findByLogin(String login);
+    
+    
 
 }
