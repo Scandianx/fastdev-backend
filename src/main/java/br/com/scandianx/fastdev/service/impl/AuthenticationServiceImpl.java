@@ -65,6 +65,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         visualizador.setNomeCompleto(data.nomeCompleto());
         visualizador.setPassword(eP);
         visualizador.setRole(UsuarioRole.USER);
+        visualizador.setTelefone(data.telefone());
         observadores.forEach(obs -> obs.notificarNovoUsuario(visualizador));
         visualizadorRepository.save(visualizador);
 

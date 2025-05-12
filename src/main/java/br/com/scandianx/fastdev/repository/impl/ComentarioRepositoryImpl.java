@@ -4,6 +4,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.scandianx.fastdev.model.Comentario;
+
 import br.com.scandianx.fastdev.repository.interfaces.ComentarioRepository;
 
 import java.util.List;
@@ -13,4 +14,5 @@ public interface ComentarioRepositoryImpl
         extends JpaRepository<Comentario, Long>, ComentarioRepository {
     @Override
     List<Comentario> findByVideoId(Long videoId);
+    
 }

@@ -1,12 +1,13 @@
 package br.com.scandianx.fastdev.components;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import br.com.scandianx.fastdev.model.VideoAbstrato;
 import br.com.scandianx.fastdev.model.VideoYoutube;
 import br.com.scandianx.fastdev.repository.interfaces.VideoYoutubeRepository;
 import br.com.scandianx.fastdev.view.VideoRequestDTO;
-
+@Component
 public class VideoFactory {
     
     @Autowired

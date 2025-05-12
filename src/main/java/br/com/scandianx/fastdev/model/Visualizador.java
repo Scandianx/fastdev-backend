@@ -18,4 +18,16 @@ public class Visualizador extends Usuario{
     @Column(nullable = false)
     private String nomeCompleto;
 
+    @Override
+    public boolean podeVisualizar(NivelAcesso nivelAcesso) {
+        if (getRole() == UsuarioRole.ADMIN) return true;
+
+        return switch (nivelAcesso) {
+            case BRDEV -> getRole() == UsuarioRole.BRDEV || getRole() == UsuarioRole.GRINGADEV;
+            case GRINGADEV -> getRole() == UsuarioRole.GRINGADEV;
+            case FREE -> true;
+            case PRIVATE -> false;
+        };
+    }
+
 }

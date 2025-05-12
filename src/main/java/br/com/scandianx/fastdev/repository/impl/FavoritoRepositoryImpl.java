@@ -1,9 +1,13 @@
 package br.com.scandianx.fastdev.repository.impl;
 
+import java.util.List;
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import br.com.scandianx.fastdev.model.Favorito;
+import br.com.scandianx.fastdev.model.Usuario;
 import br.com.scandianx.fastdev.repository.interfaces.FavoritoRepository;
 
 
@@ -14,4 +18,8 @@ public interface FavoritoRepositoryImpl
     void deleteByUsuarioIdAndVideoId(Long usuarioId, Long videoId);
     @Override
     boolean existsByUsuarioIdAndVideoId(Long usuarioId, Long videoId);
+    @Override
+    List<Favorito> findByUsuario(Usuario usuario);
+    @Override
+    Optional<Favorito> findByUsuarioAndVideoId(Usuario usuario, Long videoId);
 }
