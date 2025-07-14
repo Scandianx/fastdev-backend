@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Pesquisa no Google</title>
+  <style></style>
+</head>
+<body>
+
+  <form class="search-container" action="https://www.google.com/search" method="GET" target="_blank">
+    <label for="searchInput">Pesquisar:</label>
+    <input type="text" id="searchInput" name="q" list="sugestoes" placeholder="Digite aqui a sua consulta" autocomplete="on">
+    
+    <datalist id="sugestoes">
+      <option value="sugestao 1">
+      <option value="sugestao 2">
+      <option value="sugestao 3">
+      <option value="sugestao 4">
+    </datalist>
+
+    <button type="submit">Buscar</button>
+    <button type="reset">Limpar</button>
+  </form>
+
+</body>
+</html>
