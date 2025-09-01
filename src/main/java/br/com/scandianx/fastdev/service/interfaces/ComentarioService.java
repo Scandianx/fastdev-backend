@@ -2,7 +2,7 @@ package br.com.scandianx.fastdev.service.interfaces;
 
 import java.util.List;
 
-import br.com.scandianx.fastdev.view.ComentarioDTO;
+import br.com.scandianx.fastdev.dto.ComentarioDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 

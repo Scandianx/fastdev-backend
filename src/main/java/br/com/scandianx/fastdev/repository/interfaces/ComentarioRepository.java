@@ -1,10 +1,9 @@
 package br.com.scandianx.fastdev.repository.interfaces;
 
-import br.com.scandianx.fastdev.model.Comentario;
-
-
 import java.util.List;
 import java.util.Optional;
+
+import br.com.scandianx.fastdev.entity.Comentario;
 
 public interface ComentarioRepository {
     Comentario save(Comentario comentario);

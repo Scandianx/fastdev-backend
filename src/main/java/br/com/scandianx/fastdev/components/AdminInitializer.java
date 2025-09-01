@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import br.com.scandianx.fastdev.model.UsuarioRole;
-import br.com.scandianx.fastdev.model.Visualizador;
+import br.com.scandianx.fastdev.entity.UsuarioRole;
+import br.com.scandianx.fastdev.entity.Visualizador;
 import br.com.scandianx.fastdev.repository.interfaces.UsuarioRepository;
 import br.com.scandianx.fastdev.repository.interfaces.VisualizadorRepository;
 import jakarta.annotation.PostConstruct;

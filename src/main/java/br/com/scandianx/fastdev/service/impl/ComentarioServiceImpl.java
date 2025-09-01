@@ -7,14 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.scandianx.fastdev.components.Converter;
-import br.com.scandianx.fastdev.model.Comentario;
-import br.com.scandianx.fastdev.model.Usuario;
-import br.com.scandianx.fastdev.model.VideoAbstrato;
+import br.com.scandianx.fastdev.dto.ComentarioDTO;
+import br.com.scandianx.fastdev.entity.Comentario;
+import br.com.scandianx.fastdev.entity.Usuario;
+import br.com.scandianx.fastdev.entity.VideoAbstrato;
 import br.com.scandianx.fastdev.repository.interfaces.ComentarioRepository;
 import br.com.scandianx.fastdev.repository.interfaces.VideoRepository;
 import br.com.scandianx.fastdev.service.interfaces.AuthorizationService;
 import br.com.scandianx.fastdev.service.interfaces.ComentarioService;
-import br.com.scandianx.fastdev.view.ComentarioDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service

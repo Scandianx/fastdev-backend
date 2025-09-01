@@ -9,12 +9,12 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import br.com.scandianx.fastdev.components.VideoFactory;
-import br.com.scandianx.fastdev.model.Usuario;
-import br.com.scandianx.fastdev.model.VideoAbstrato;
+import br.com.scandianx.fastdev.dto.VideoRequestDTO;
+import br.com.scandianx.fastdev.entity.Usuario;
+import br.com.scandianx.fastdev.entity.VideoAbstrato;
 import br.com.scandianx.fastdev.repository.impl.VideoRepositoryImpl;
 import br.com.scandianx.fastdev.service.interfaces.AuthorizationService;
 import br.com.scandianx.fastdev.service.interfaces.VideoService;
-import br.com.scandianx.fastdev.view.VideoRequestDTO;
 import jakarta.servlet.http.HttpServletRequest;
 
 @Service
@@ -40,6 +40,9 @@ public class VideoServiceImpl implements VideoService {
         return videoRepository.findAll().stream()
                 .filter(video -> usuario != null && usuario.podeVisualizar(video.getNivelAcesso()))
                 .toList();
+    }
+    public List<VideoAbstrato> listarTodos(){
+        return videoRepository.findAll();
     }
 }
 

@@ -1,7 +1,8 @@
 package br.com.scandianx.fastdev.components;
 
 import org.springframework.stereotype.Component;
-import br.com.scandianx.fastdev.model.Usuario;
+
+import br.com.scandianx.fastdev.entity.Usuario;
 
 @Component
 public class WhatsappObserver implements UsuarioObserver {

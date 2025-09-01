@@ -6,8 +6,8 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import br.com.scandianx.fastdev.model.Favorito;
-import br.com.scandianx.fastdev.model.Usuario;
+import br.com.scandianx.fastdev.entity.Favorito;
+import br.com.scandianx.fastdev.entity.Usuario;
 import br.com.scandianx.fastdev.repository.interfaces.FavoritoRepository;
 
 

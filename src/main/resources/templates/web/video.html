@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="pt" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments/layout :: head('FastDev - Assistir Vídeo')}"></head>
+<body style="background:#121212;color:#E0E0E0;font-family:Arial,sans-serif;margin:0;">
+
+  <style>
+    .container{max-width:1200px;margin:32px auto;padding:0 20px;display:grid;gap:28px;grid-template-columns:1fr}
+    @media (min-width:1000px){.container{grid-template-columns:2fr 1fr}}
+    .brand{font-weight:700;letter-spacing:1px}
+    .btn{background:#D32F2F;color:#fff;border:none;padding:10px 16px;border-radius:10px;cursor:pointer;transition:transform .15s ease,opacity .15s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn.ghost{background:#2b2b2b;color:#E0E0E0;border:1px solid #3a3a3a}
+    .btn.inline{display:inline-flex;gap:8px;align-items:center}
+    .btn.fav.active{background:#e74a4a}
+    .chip{display:inline-block;background:#1e1e1e;border:1px solid #2b2b2b;color:#B0BEC5;padding:6px 10px;border-radius:999px;font-size:12px}
+    .video-wrap{position:relative;padding-top:56.25%;border-radius:14px;overflow:hidden;background:#000}
+    .video-wrap iframe{position:absolute;inset:0;width:100%;height:100%;border:0}
+    .title{font-size:24px;font-weight:700;margin:14px 0 8px}
+    .desc{color:#B0BEC5;margin:0 0 18px 0}
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:20px}
+    .panel{background:#1a1a1a;border:1px solid #2b2b2b;border-radius:12px;padding:16px}
+    .comments h2{margin:0 0 12px 0}
+    .c-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+    .comment{display:flex;gap:10px}
+    .avatar{flex:0 0 36px;height:36px;border-radius:50%;background:#2b2b2b;display:flex;align-items:center;justify-content:center;font-weight:700;color:#E0E0E0}
+    .bubble{background:#1e1e1e;border:1px solid #2b2b2b;border-radius:10px;padding:10px 12px;flex:1}
+    .meta{font-size:12px;color:#9aa4ac;margin-bottom:6px}
+    .text{white-space:pre-wrap;word-break:break-word}
+    .form-row{display:flex;gap:10px;align-items:center;justify-content:flex-end;margin-top:10px}
+    .input, textarea.input{width:100%;padding:10px 12px;border-radius:10px;border:1px solid #333;background:#1c1c1c;color:#E0E0E0;outline:none}
+    .char{font-size:12px;color:#9aa4ac;margin-right:auto}
+    .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(10px);background:#2a2a2a;color:#fff;padding:10px 14px;border-radius:10px;opacity:0;transition:all .2s;border:1px solid #3a3a3a;z-index:9999}
+    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    header.sticky{position:sticky;top:0;z-index:100;background:#121212bd;backdrop-filter:saturate(150%) blur(6px)}
+    .side{display:flex;flex-direction:column;gap:14px}
+    .side .panel h3{margin:0 0 10px 0;font-size:16px}
+    .mini{display:flex;gap:10px;align-items:center}
+    .mini-thumb{width:88px;height:54px;background:#111;border-radius:8px;border:1px solid #2b2b2b;overflow:hidden}
+    .mini-title{font-size:13px;line-height:1.3}
+  </style>
+
+  <header class="sticky" style="padding:16px 20px;border-bottom:1px solid #2c2c2c;display:flex;justify-content:space-between;align-items:center;">
+    <div class="brand">FAST<span style="color:#D32F2F;">D</span>EV</div>
+    <div style="display:flex;gap:10px;align-items:center">
+      <a href="/web" class="btn ghost inline">⬅ Voltar</a>
+      <a href="/auth-web" class="btn ghost inline" onclick="localStorage.removeItem('fastdev_token')">Sair</a>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Coluna principal -->
+    <section>
+      <div class="video-wrap">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+          title="FASTDEV - Vídeo Demo"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          allowfullscreen></iframe>
+      </div>
+
+      <div class="title">Como construir projetos que impressionam recrutadores</div>
+      <div class="desc">Dicas práticas, exemplos reais e atalhos que encurtam o caminho entre “estudando” e “assinado a proposta”.</div>
+
+      <div class="actions">
+        <button id="favBtn" class="btn fav inline"><span>Favoritar</span> ❤️</button>
+        <button id="copyBtn" class="btn ghost inline">Copiar link</button>
+        <span class="chip">Nível • Intermediário</span>
+        <span class="chip">Stack • Java & Spring</span>
+      </div>
+
+      <!-- Comentários -->
+      <section class="panel comments">
+        <h2>Comentários</h2>
+
+        <ul id="commentsList" class="c-list"></ul>
+
+        <form id="commentForm">
+          <input id="author" class="input" type="text" placeholder="Seu nome (opcional)">
+          <textarea id="commentText" class="input" rows="3" maxlength="500" placeholder="Escreva um comentário... (Ctrl/Cmd + Enter para enviar)"></textarea>
+          <div class="form-row">
+            <span id="charCount" class="char">0/500</span>
+            <button type="submit" class="btn">Enviar</button>
+          </div>
+        </form>
+      </section>
+    </section>
+
+    <!-- Coluna lateral (opcional / mock) -->
+    <aside class="side">
+      <div class="panel">
+        <h3>Próximos vídeos</h3>
+        <div class="mini">
+          <div class="mini-thumb">
+            <img th:src="@{/images/thumb-placeholder.png}" alt="" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="mini-title">Estruturando seu portfólio para entrevistas</div>
+        </div>
+        <div class="mini">
+          <div class="mini-thumb">
+            <img th:src="@{/images/thumb-placeholder.png}" alt="" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="mini-title">Projeto Spring Boot do zero ao deploy</div>
+        </div>
+        <div class="mini">
+          <div class="mini-thumb">
+            <img th:src="@{/images/thumb-placeholder.png}" alt="" style="width:100%;height:100%;object-fit:cover;">
+          </div>
+          <div class="mini-title">Como vender seu código em 5 minutos</div>
+        </div>
+      </div>
+    </aside>
+  </main>
+
+  <footer th:replace="~{fragments/layout :: footer}"></footer>
+
+  <script>
+    // ===== Config mock por pág. =====
+    const COMMENTS_KEY = 'fastdev_comments_demo_v1';
+    const FAV_KEY = 'fastdev_fav_demo_v1';
+
+    // ===== Util =====
+    const $ = sel => document.querySelector(sel);
+    function escapeHtml(str){return str.replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
+    function linkify(str){return str.replace(/(https?:\/\/\S+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')}
+    function timeAgo(ts){
+      const s=Math.floor((Date.now()-ts)/1000);
+      if(s<60) return 'agora';
+      const m=Math.floor(s/60); if(m<60) return m+' min';
+      const h=Math.floor(m/60); if(h<24) return h+' h';
+      const d=Math.floor(h/24); return d+' d';
+    }
+    function toast(msg){
+      const el=document.createElement('div'); el.className='toast'; el.textContent=msg;
+      document.body.appendChild(el);
+      setTimeout(()=>el.classList.add('show'),10);
+      setTimeout(()=>{el.classList.remove('show'); setTimeout(()=>el.remove(),200)},2000);
+    }
+
+    // ===== Comentários (localStorage mock) =====
+    let comments = [];
+    try{
+      const raw = localStorage.getItem(COMMENTS_KEY);
+      comments = raw ? JSON.parse(raw) : null;
+    }catch{comments=null}
+    if(!Array.isArray(comments)){
+      comments = [
+        {author:'João', text:'Muito bom esse conteúdo!', ts: Date.now()-86400000},
+        {author:'Ana', text:'Ajudou demais no meu projeto 🚀', ts: Date.now()-3600000}
+      ];
+      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+    }
+
+    const listEl = $('#commentsList');
+    function renderComments(){
+      listEl.innerHTML = comments.map(c => `
+        <li class="comment">
+          <div class="avatar">${(c.author||'Anônimo').trim().charAt(0).toUpperCase()}</div>
+          <div class="bubble">
+            <div class="meta"><strong>${escapeHtml(c.author||'Anônimo')}</strong> · <span>${timeAgo(c.ts)}</span></div>
+            <div class="text">${linkify(escapeHtml(c.text))}</div>
+          </div>
+        </li>
+      `).join('');
+    }
+    renderComments();
+
+    const form = $('#commentForm');
+    const authorInput = $('#author');
+    const textInput = $('#commentText');
+    const charCount = $('#charCount');
+
+    charCount.textContent = '0/500';
+    textInput.addEventListener('input', ()=> charCount.textContent = `${textInput.value.length}/500`);
+    textInput.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){ form.requestSubmit(); }});
+
+    form.addEventListener('submit', e=>{
+      e.preventDefault();
+      const txt = textInput.value.trim();
+      if(!txt){ toast('Escreva algo antes de enviar'); return; }
+      const author = (authorInput.value || 'Você').trim();
+      comments.unshift({author,text:txt,ts:Date.now()});
+      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
+      textInput.value=''; authorInput.value=''; charCount.textContent='0/500';
+      renderComments();
+      toast('Comentário publicado!');
+    });
+
+    // ===== Favoritar (localStorage mock) =====
+    const favBtn = $('#favBtn');
+    let fav = localStorage.getItem(FAV_KEY) === '1';
+    function syncFavUI(){ favBtn.classList.toggle('active', fav); favBtn.querySelector('span').textContent = fav?'Favoritado':'Favoritar'; }
+    syncFavUI();
+    favBtn.addEventListener('click', ()=>{
+      fav = !fav;
+      localStorage.setItem(FAV_KEY, fav ? '1' : '0');
+      syncFavUI();
+      toast(fav ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+    });
+
+    // ===== Copiar link =====
+    const copyBtn = $('#copyBtn');
+    copyBtn.addEventListener('click', async ()=>{
+      try{ await navigator.clipboard.writeText(location.href); toast('Link copiado!'); }
+      catch{ toast('Não foi possível copiar'); }
+    });
+  </script>
+</body>
+</html>

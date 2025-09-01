@@ -5,10 +5,12 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Component;
 
-import br.com.scandianx.fastdev.model.Comentario;
-import br.com.scandianx.fastdev.model.Favorito;
-import br.com.scandianx.fastdev.view.ComentarioDTO;
-import br.com.scandianx.fastdev.view.FavoritoDTO;
+import br.com.scandianx.fastdev.dto.ComentarioDTO;
+import br.com.scandianx.fastdev.dto.FavoritoDTO;
+import br.com.scandianx.fastdev.dto.VideoCardDTO;
+import br.com.scandianx.fastdev.entity.Comentario;
+import br.com.scandianx.fastdev.entity.Favorito;
+import br.com.scandianx.fastdev.entity.VideoAbstrato;
 
 @Component
 public class Converter {
@@ -37,6 +39,17 @@ public class Converter {
         return comentarios.stream()
             .map(this::toDTO)
             .collect(Collectors.toList());
+    }
+    public VideoCardDTO toVideoCardDTO(VideoAbstrato v) {
+        return new VideoCardDTO(
+                v.getTitulo(),
+                v.getUrl(),
+                v.getNivelAcesso().name()
+        );
+    }
+
+    public List<VideoCardDTO> toVideoCardDTOList(List<VideoAbstrato> videos) {
+        return videos.stream().map(this::toVideoCardDTO).collect(Collectors.toList());
     }
     
 }

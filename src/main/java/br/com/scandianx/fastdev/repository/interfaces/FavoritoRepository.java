@@ -3,8 +3,8 @@ package br.com.scandianx.fastdev.repository.interfaces;
 import java.util.List;
 import java.util.Optional;
 
-import br.com.scandianx.fastdev.model.Favorito;
-import br.com.scandianx.fastdev.model.Usuario;
+import br.com.scandianx.fastdev.entity.Favorito;
+import br.com.scandianx.fastdev.entity.Usuario;
 
 public interface FavoritoRepository {
     Favorito save(Favorito favorito);
