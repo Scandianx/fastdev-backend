@@ -3,60 +3,80 @@
 <head th:replace="fragments/layout :: head('FastDev - Login/Cadastro')"></head>
 <body style="background-color:#121212;color:#E0E0E0;line-height:1.6;margin:0;padding:20px 0 80px 0;min-height:calc(100vh - 100px);display:flex;justify-content:center;align-items:flex-start;">
   <div class="auth-container" style="background-color:#222;padding:40px;border-radius:15px;width:100%;max-width:400px;box-shadow:0 10px 20px rgba(0,0,0,.5);margin-top:20px;">
-    <div class="logo" style="font-size:28px;font-weight:bold;letter-spacing:1px;color:#E0E0E0;text-align:center;margin-bottom:30px;">FAST<span style="color:#D32F2F;">D</span>EV</div>
-
-    <div class="tabs" style="display:flex;justify-content:space-around;margin-bottom:30px;">
-      <div id="tab-login" class="tab active" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:#B0BEC5;cursor:pointer;transition:color .3s,border-bottom .3s;border-bottom:2px solid #D32F2F;">Login</div>
-      <div id="tab-register" class="tab" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:#B0BEC5;cursor:pointer;transition:color .3s,border-bottom .3s;border-bottom:2px solid transparent;">Cadastro</div>
+    
+    <div class="logo" style="font-size:28px;font-weight:bold;letter-spacing:1px;color:#E0E0E0;text-align:center;margin-bottom:30px;">
+      FAST<span style="color:#D32F2F;">D</span>EV
     </div>
 
-    <div id="alert" style="display:none;background:#3b1d1d;color:#ffcaca;padding:10px;border-radius:6px;margin-bottom:12px;border-left:4px solid #ff4444;"></div>
-    <div id="success" style="display:none;background:#1d3b24;color:#caffd2;padding:10px;border-radius:6px;margin-bottom:12px;border-left:4px solid #44ff44;"></div>
+    <!-- Mensagens globais -->
+    <div th:if="${successMessage}" th:text="${successMessage}" style="background:#1d3b24;color:#caffd2;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
+    <div th:if="${errorMessage}" th:text="${errorMessage}" style="background:#3b1d1d;color:#ffcaca;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
 
+    <div class="tabs" style="display:flex;justify-content:space-around;margin-bottom:30px;">
+      <div id="tab-login" class="tab active" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:#B0BEC5;cursor:pointer;border-bottom:2px solid #D32F2F;">Login</div>
+      <div id="tab-register" class="tab" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:#B0BEC5;cursor:pointer;border-bottom:2px solid transparent;">Cadastro</div>
+    </div>
+
+    <!-- Login -->
     <div id="login" class="form-container active">
-      <form id="login-form">
+      <form th:action="@{/auth-web/login}" th:object="${loginDTO}" method="post">
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="login-email" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">E-mail ou usuário</label>
-          <input type="text" id="login-email" placeholder="Digite seu login" required style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
+          <label>Login</label>
+          <input type="text" th:field="*{login}" class="form-input" placeholder="Digite seu login" required
+                 th:classappend="${#fields.hasErrors('login')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error-msg"></div>
         </div>
+
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="login-password" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">Senha</label>
-          <input type="password" id="login-password" placeholder="Digite sua senha" required style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
+          <label>Senha</label>
+          <input type="password" th:field="*{password}" class="form-input" placeholder="Digite sua senha" required
+                 th:classappend="${#fields.hasErrors('password')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-msg"></div>
         </div>
-        <button type="submit" class="btn" style="display:block;width:100%;background:#D32F2F;color:#E0E0E0;padding:12px;text-decoration:none;border:none;border-radius:5px;font-weight:bold;font-size:16px;cursor:pointer;transition:background .3s,transform .2s;">Entrar</button>
-        <div class="forgot-password" style="text-align:center;margin-top:15px;">
-          <a href="#" style="color:#B0BEC5;text-decoration:none;font-size:14px;transition:color .3s;">Esqueceu sua senha?</a>
-        </div>
+
+        <button type="submit" class="btn">Entrar</button>
       </form>
     </div>
 
+    <!-- Cadastro -->
     <div id="register" class="form-container" style="display:none;">
-      <form id="register-form">
+      <form th:action="@{/auth-web/register}" th:object="${registerDTO}" method="post">
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="register-name" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">Nome *</label>
-          <input type="text" id="register-name" placeholder="Digite seu nome" required style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
-          <div class="error-msg" id="name-error" style="color:#ff4444;font-size:12px;margin-top:5px;display:none;"></div>
+          <label>Nome *</label>
+          <input type="text" th:field="*{nome}" class="form-input" placeholder="Digite seu nome" required
+                 th:classappend="${#fields.hasErrors('nome')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-msg"></div>
         </div>
+
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="register-email" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">Login *</label>
-          <input type="text" id="register-email" placeholder="Seu login" required style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
-          <div class="error-msg" id="login-error" style="color:#ff4444;font-size:12px;margin-top:5px;display:none;"></div>
+          <label>Login *</label>
+          <input type="text" th:field="*{login}" class="form-input" placeholder="Seu login" required
+                 th:classappend="${#fields.hasErrors('login')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error-msg"></div>
         </div>
+
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="register-password" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">Senha *</label>
-          <input type="password" id="register-password" placeholder="Crie uma senha" required style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
-          <div class="error-msg" id="password-error" style="color:#ff4444;font-size:12px;margin-top:5px;display:none;"></div>
+          <label>Senha *</label>
+          <input type="password" th:field="*{password}" class="form-input" placeholder="Crie uma senha" required
+                 th:classappend="${#fields.hasErrors('password')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-msg"></div>
         </div>
+
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="register-nome-completo" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">Nome completo</label>
-          <input type="text" id="register-nome-completo" placeholder="Seu nome completo" style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
+          <label>Nome completo *</label>
+          <input type="text" th:field="*{nomeCompleto}" class="form-input" placeholder="Nome completo" required
+                 th:classappend="${#fields.hasErrors('nomeCompleto')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}" class="error-msg"></div>
         </div>
+
         <div class="form-group" style="margin-bottom:20px;">
-          <label for="register-telefone" style="display:block;font-size:14px;color:#B0BEC5;margin-bottom:5px;">Telefone</label>
-          <input type="text" id="register-telefone" placeholder="(11) 99999-9999" style="width:calc(100% - 24px);padding:12px;border:2px solid #333;border-radius:5px;background-color:#333;color:#E0E0E0;font-size:16px;outline:none;transition:background .3s,border-color .3s;">
-          <div class="error-msg" id="phone-error" style="color:#ff4444;font-size:12px;margin-top:5px;display:none;"></div>
+          <label>Telefone *</label>
+          <input type="text" th:field="*{telefone}" class="form-input" placeholder="(11) 99999-9999" required
+                 th:classappend="${#fields.hasErrors('telefone')} ? ' input-error' : ''"/>
+          <div th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error-msg"></div>
         </div>
-        <button type="submit" class="btn" style="display:block;width:100%;background:#D32F2F;color:#E0E0E0;padding:12px;text-decoration:none;border:none;border-radius:5px;font-weight:bold;font-size:16px;cursor:pointer;transition:background .3s,transform .2s;">Cadastrar</button>
+
+        <button type="submit" class="btn">Cadastrar</button>
       </form>
     </div>
   </div>
@@ -66,224 +86,76 @@
   </footer>
 
   <style>
-    .form-container input:focus {
+    .form-input {
+      width: 100%;
+      padding: 12px;
+      border-radius: 5px;
+      border: 2px solid #333;
+      background-color: #333;
+      color: #E0E0E0;
+      font-size: 16px;
+      outline: none;
+      transition: background .3s, border-color .3s;
+    }
+
+    .form-input:focus {
       border-color: #D32F2F !important;
       background-color: #2a2a2a !important;
     }
-    .form-container input.error {
-      border-color: #ff4444 !important;
+
+    .btn {
+      display: block;
+      width: 100%;
+      background: #D32F2F;
+      color: #E0E0E0;
+      padding: 12px;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background .3s, transform .2s;
     }
-    .form-container input.success {
-      border-color: #44ff44 !important;
-    }
+
     .btn:hover {
       background: #b71c1c !important;
       transform: translateY(-1px) !important;
     }
-    .btn:active {
-      transform: translateY(0px) !important;
-    }
+
     .tab:hover {
       color: #E0E0E0 !important;
     }
-    .forgot-password a:hover {
-      color: #D32F2F !important;
+
+    .form-container input.input-error {
+      border-color: #ff4444 !important;
+    }
+
+    .error-msg {
+      color: #ff4444;
+      font-size: 12px;
+      margin-top: 5px;
     }
   </style>
 
   <script>
-    const tabLogin=document.getElementById('tab-login')
-    const tabRegister=document.getElementById('tab-register')
-    const loginBox=document.getElementById('login')
-    const registerBox=document.getElementById('register')
-    const alertBox=document.getElementById('alert')
-    const successBox=document.getElementById('success')
+    const tabLogin = document.getElementById('tab-login');
+    const tabRegister = document.getElementById('tab-register');
+    const loginBox = document.getElementById('login');
+    const registerBox = document.getElementById('register');
 
-    // Validação functions
-    function validateName(name) {
-      if (name.length < 2) {
-        return 'Nome deve ter pelo menos 2 caracteres'
-      }
-      if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(name)) {
-        return 'Nome deve conter apenas letras'
-      }
-      return null
-    }
+    tabLogin.addEventListener('click', () => {
+      loginBox.style.display = 'block';
+      registerBox.style.display = 'none';
+      tabLogin.style.borderBottom = '2px solid #D32F2F';
+      tabRegister.style.borderBottom = '2px solid transparent';
+    });
 
-    function validateLogin(login) {
-      if (login.length < 3) {
-        return 'Login deve ter pelo menos 3 caracteres'
-      }
-      if (!/^[a-zA-Z0-9@._-]+$/.test(login)) {
-        return 'Login pode conter apenas letras, números, @, ., _ e -'
-      }
-      return null
-    }
-
-    function validatePassword(password) {
-      if (password.length < 6) {
-        return 'Senha deve ter pelo menos 6 caracteres'
-      }
-      if (!/(?=.*[A-Za-z])(?=.*\d)/.test(password)) {
-        return 'Senha deve conter pelo menos 1 letra e 1 número'
-      }
-      return null
-    }
-
-    function validatePhone(phone) {
-      if (phone && !/^(\(?\d{2}\)?\s?)?(\d{4,5})-?(\d{4})$/.test(phone.replace(/\s/g, ''))) {
-        return 'Formato de telefone inválido. Use: (11) 99999-9999'
-      }
-      return null
-    }
-
-    function showFieldError(fieldId, message) {
-      const field = document.getElementById(fieldId)
-      const errorDiv = document.getElementById(fieldId.replace('register-', '') + '-error')
-      if (message) {
-        field.classList.add('error')
-        field.classList.remove('success')
-        if (errorDiv) {
-          errorDiv.textContent = message
-          errorDiv.style.display = 'block'
-        }
-        return false
-      } else {
-        field.classList.remove('error')
-        field.classList.add('success')
-        if (errorDiv) {
-          errorDiv.style.display = 'none'
-        }
-        return true
-      }
-    }
-
-    // Real-time validation
-    document.getElementById('register-name').addEventListener('input', function() {
-      const error = validateName(this.value.trim())
-      showFieldError('register-name', error)
-    })
-
-    document.getElementById('register-email').addEventListener('input', function() {
-      const error = validateLogin(this.value.trim())
-      showFieldError('register-email', error)
-    })
-
-    document.getElementById('register-password').addEventListener('input', function() {
-      const error = validatePassword(this.value)
-      showFieldError('register-password', error)
-    })
-
-    document.getElementById('register-telefone').addEventListener('input', function() {
-      const error = validatePhone(this.value.trim())
-      showFieldError('register-telefone', error)
-    })
-
-    // Phone mask
-    document.getElementById('register-telefone').addEventListener('input', function() {
-      let value = this.value.replace(/\D/g, '')
-      if (value.length <= 11) {
-        value = value.replace(/^(\d{2})(\d{4,5})(\d{4})$/, '($1) $2-$3')
-        value = value.replace(/^(\d{2})(\d{0,4})/, '($1) $2')
-        this.value = value
-      }
-    })
-
-    function switchTab(which){
-      if(which==='login'){
-        loginBox.style.display='block'
-        registerBox.style.display='none'
-        tabLogin.style.borderBottom='2px solid #D32F2F'
-        tabRegister.style.borderBottom='2px solid transparent'
-      }else{
-        registerBox.style.display='block'
-        loginBox.style.display='none'
-        tabRegister.style.borderBottom='2px solid #D32F2F'
-        tabLogin.style.borderBottom='2px solid transparent'
-      }
-      alertBox.style.display='none'
-      successBox.style.display='none'
-      // Clear all field states
-      document.querySelectorAll('input').forEach(input => {
-        input.classList.remove('error', 'success')
-      })
-      document.querySelectorAll('.error-msg').forEach(err => {
-        err.style.display = 'none'
-      })
-    }
-
-    tabLogin.addEventListener('click',()=>switchTab('login'))
-    tabRegister.addEventListener('click',()=>switchTab('register'))
-
-    document.getElementById('login-form').addEventListener('submit',async e=>{
-      e.preventDefault()
-      const login=document.getElementById('login-email').value.trim()
-      const password=document.getElementById('login-password').value
-      
-      if (!login || !password) {
-        alertBox.style.display='block'
-        alertBox.textContent='Por favor, preencha todos os campos'
-        return
-      }
-      
-      alertBox.style.display='none'
-      successBox.style.display='none'
-      try{
-        const r=await fetch('/auth/login',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({login,password})})
-        if(!r.ok){throw new Error('erro')}
-        const data=await r.json()
-        if(data&&data.token){localStorage.setItem('fastdev_token',data.token);window.location.href='/web'}
-        else{successBox.style.display='block';successBox.textContent='Login realizado.'}
-      }catch(err){
-        alertBox.style.display='block'
-        alertBox.textContent='Credenciais inválidas'
-      }
-    })
-
-    document.getElementById('register-form').addEventListener('submit',async e=>{
-      e.preventDefault()
-      const nome=document.getElementById('register-name').value.trim()
-      const login=document.getElementById('register-email').value.trim()
-      const password=document.getElementById('register-password').value
-      const nomeCompleto=document.getElementById('register-nome-completo').value.trim()
-      const telefone=document.getElementById('register-telefone').value.trim()
-      
-      // Validate all fields
-      let isValid = true
-      
-      const nameError = validateName(nome)
-      if (!showFieldError('register-name', nameError)) isValid = false
-      
-      const loginError = validateLogin(login)
-      if (!showFieldError('register-email', loginError)) isValid = false
-      
-      const passwordError = validatePassword(password)
-      if (!showFieldError('register-password', passwordError)) isValid = false
-      
-      const phoneError = validatePhone(telefone)
-      if (!showFieldError('register-telefone', phoneError)) isValid = false
-      
-      if (!isValid) {
-        alertBox.style.display='block'
-        alertBox.textContent='Por favor, corrija os erros nos campos destacados'
-        return
-      }
-      
-      alertBox.style.display='none'
-      successBox.style.display='none'
-      try{
-        const r=await fetch('/auth/register-visualizador',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nome,login,password,nomeCompleto,telefone})})
-        if(!r.ok){throw new Error('erro')}
-        successBox.style.display='block'
-        successBox.textContent='Cadastro realizado. Faça login.'
-        switchTab('login')
-        // Clear form
-        document.getElementById('register-form').reset()
-      }catch(err){
-        alertBox.style.display='block'
-        alertBox.textContent='Não foi possível cadastrar'
-      }
-    })
+    tabRegister.addEventListener('click', () => {
+      loginBox.style.display = 'none';
+      registerBox.style.display = 'block';
+      tabRegister.style.borderBottom = '2px solid #D32F2F';
+      tabLogin.style.borderBottom = '2px solid transparent';
+    });
   </script>
 </body>
 </html>

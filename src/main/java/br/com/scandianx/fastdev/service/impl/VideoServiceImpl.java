@@ -8,7 +8,9 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import br.com.scandianx.fastdev.components.Converter;
 import br.com.scandianx.fastdev.components.VideoFactory;
+import br.com.scandianx.fastdev.dto.VideoDTO;
 import br.com.scandianx.fastdev.dto.VideoRequestDTO;
 import br.com.scandianx.fastdev.entity.Usuario;
 import br.com.scandianx.fastdev.entity.VideoAbstrato;
@@ -28,6 +30,9 @@ public class VideoServiceImpl implements VideoService {
 
     @Autowired
     private AuthorizationService authorizationService;
+
+    @Autowired
+    private Converter converter;
 
     @Override
     public VideoAbstrato criarVideo(VideoRequestDTO dto) {

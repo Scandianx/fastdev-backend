@@ -199,6 +199,9 @@ src/main/resources/
 Definir licença do projeto no repositório.
 
 ---
+## 📐 Diagrama de Classes
+
+![Diagrama de Classes](Docs/Plataforma%20de%20Streaming%20de%20cursos/diagrama-de-classes.png)
 
 ## EN
 

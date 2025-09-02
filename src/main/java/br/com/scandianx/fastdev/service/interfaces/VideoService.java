@@ -4,6 +4,7 @@ import jakarta.servlet.http.HttpServletRequest;
 
 import java.util.List;
 
+import br.com.scandianx.fastdev.dto.VideoDTO;
 import br.com.scandianx.fastdev.dto.VideoRequestDTO;
 import br.com.scandianx.fastdev.entity.VideoAbstrato;
 

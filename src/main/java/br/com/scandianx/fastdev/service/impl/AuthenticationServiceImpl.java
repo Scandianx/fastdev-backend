@@ -41,7 +41,7 @@ public class AuthenticationServiceImpl implements AuthenticationService{
     public ResponseEntity<LoginResponseDTO> login(AuthenticationDTO data){
         try {
             
-            var usernamePassword = new UsernamePasswordAuthenticationToken(data.login(), data.password());
+            var usernamePassword = new UsernamePasswordAuthenticationToken(data.getLogin(), data.getPassword());
             var auth = this.authenticationManager.authenticate(usernamePassword);
     
             var token = tokenService.generateToken((UserDetails) auth.getPrincipal());
@@ -56,16 +56,16 @@ public class AuthenticationServiceImpl implements AuthenticationService{
 
     
     public ResponseEntity<String> register(RegisterDTO data){
-        if(this.usuarioRepository.findByLogin(data.login()) != null) return ResponseEntity.badRequest().body("Esse email já foi cadastrado no sistema!");
+        if(this.usuarioRepository.findByLogin(data.getLogin()) != null) return ResponseEntity.badRequest().body("Esse email já foi cadastrado no sistema!");
 
-        String eP = new BCryptPasswordEncoder().encode(data.password());
+        String eP = new BCryptPasswordEncoder().encode(data.getPassword());
         Visualizador visualizador = new Visualizador();
-        visualizador.setLogin(data.login());
-        visualizador.setNome(data.nome());
-        visualizador.setNomeCompleto(data.nomeCompleto());
+        visualizador.setLogin(data.getLogin());
+        visualizador.setNome(data.getNome());
+        visualizador.setNomeCompleto(data.getNomeCompleto());
         visualizador.setPassword(eP);
         visualizador.setRole(UsuarioRole.USER);
-        visualizador.setTelefone(data.telefone());
+        visualizador.setTelefone(data.getTelefone());
         observadores.forEach(obs -> obs.notificarNovoUsuario(visualizador));
         visualizadorRepository.save(visualizador);
 
