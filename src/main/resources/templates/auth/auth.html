@@ -49,7 +49,7 @@
         </div>
 
         <div class="form-group" style="margin-bottom:20px;">
-          <label>Login *</label>
+          <label>Email *</label>
           <input type="text" th:field="*{login}" class="form-input" placeholder="Seu login" required
                  th:classappend="${#fields.hasErrors('login')} ? ' input-error' : ''"/>
           <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error-msg"></div>
