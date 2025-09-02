@@ -1,66 +1,289 @@
-# FastDev: Plataforma de Streaming de Cursos Online
+# FastDev Backend
 
-## Visão Geral do Projeto
+[PT-BR](#pt-br) • [EN](#en)
 
-A FastDev é uma plataforma inovadora de streaming de cursos online, projetada para democratizar o acesso ao conhecimento e impulsionar o desenvolvimento profissional e pessoal. Oferecemos um vasto catálogo de cursos em diversas áreas, com vídeo-aulas de alta qualidade, materiais de apoio e uma experiência de aprendizado interativa. Nossa missão é conectar alunos a instrutores renomados, fomentando uma comunidade de aprendizado contínuo e acessível.
+---
 
-## Sumário Executivo (Minimundo)
+## PT-BR
 
-A FastDev é um ecossistema de aprendizado dinâmico, dedicado a capacitar indivíduos. Com um catálogo de cursos curados e organizados em trilhas de aprendizagem, abordamos desde programação e design até gestão e marketing. A plataforma prioriza a experiência do usuário, com interface intuitiva e responsiva em todos os dispositivos. Oferecemos recursos como listas de reprodução personalizadas, anotações integradas e um sistema de recomendação inteligente. A interação é incentivada através de fóruns de discussão, webinars ao vivo e sessões de Q&A. Além disso, fornecemos certificados de conclusão para validar as novas habilidades dos alunos.
+### Visão Geral
+FastDev Backend é uma API REST em Java com Spring Boot para autenticação, gestão de vídeos e comentários, com controle de acesso baseado em níveis. O objetivo é entregar uma base sólida, escalável e segura para aplicações web e mobile.
 
-## Funcionalidades Principais
+### Principais Recursos
+- Autenticação com JWT
+- Cadastro e listagem de vídeos
+- Comentários por vídeo
+- Validações com Jakarta Bean Validation
+- Estrutura em camadas (controller, service, repository, entity, dto)
+- CORS habilitado
 
-As funcionalidades do FastDev são categorizadas para melhor compreensão e desenvolvimento:
+### Stack
+- Java 21
+- Spring Boot 3.x
+- Spring Web, Spring Security, Validation
+- JPA/Hibernate
+- Banco relacional compatível com PostgreSQL, Oracle ou H2
+- Maven
 
-### Gerenciamento de Conta e Perfil
-* Criação de conta para novos usuários (alunos e instrutores).
-* Gestão de informações de perfil e assinatura.
+### Clonar o Repositório
+```bash
+git clone https://github.com/Scandianx/fastdev-backend
+cd fastdev-backend
+```
 
-### Busca e Descoberta de Cursos
-* Busca por palavra-chave.
-* Navegação por categorias e subcategorias.
-* Sistema de recomendação de cursos baseado em interesses e histórico.
+### Pré-requisitos
+- JDK 21
+- Maven 3.9+
+- Banco de dados rodando (ex.: PostgreSQL) ou H2 para desenvolvimento
 
-### Visualização e Consumo de Conteúdo
-* Reprodução de vídeo-aulas em alta definição.
-* Funcionalidades de pausa e retomada de aulas.
-* Download de materiais de apoio (apostilas, slides).
-* Adicionar cursos à lista de favoritos.
-* Visualização de descrições completas de cursos (ementa, pré-requisitos).
+### Configuração de Ambiente
+Crie variáveis de ambiente ou um arquivo `application.properties`/`application-dev.properties` com:
 
-### Acompanhamento de Progresso e Avaliação
-* Realização de quizzes e exercícios interativos.
-* Monitoramento do progresso em cada curso.
-* Emissão de certificados de conclusão.
+```properties
+server.port=8080
+spring.datasource.url=jdbc:postgresql://localhost:5432/fastdev
+spring.datasource.username=fastdev
+spring.datasource.password=fastdev
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+api.security.token.secret=defina-um-segredo-forte
+```
 
-### Interação e Colaboração (Comunidade)
-* Sistema de anotações integradas às aulas.
-* Fóruns de discussão por curso para perguntas e respostas.
-* Participação em webinars ao vivo e sessões de Q&A com instrutores.
-* Envio de anúncios e atualizações por parte dos instrutores.
+Para Oracle, ajuste o `spring.datasource.url` e o driver conforme necessário.
 
-### Criação e Gerenciamento de Conteúdo (Para Instrutores)
-* Upload e gerenciamento de vídeo-aulas e materiais de apoio.
-* Criação e gestão de quizzes e exercícios.
-* Visualização de métricas de desempenho dos próprios cursos.
+### Subir PostgreSQL com Docker (opcional)
+```yaml
+services:
+  db:
+    image: postgres:16
+    environment:
+      - POSTGRES_DB=fastdev
+      - POSTGRES_USER=fastdev
+      - POSTGRES_PASSWORD=fastdev
+    ports:
+      - "5432:5432"
+    volumes:
+      - fastdev_data:/var/lib/postgresql/data
+volumes:
+  fastdev_data:
+```
 
-### Administração e Gerenciamento da Plataforma (Backoffice)
-* Aprovação/Rejeição de novos cursos.
-* Gerenciamento de categorias e subcategorias.
-* Monitoramento de métricas de uso da plataforma.
-* Gestão de contas de usuários (alunos e instrutores).
-* Moderação de fóruns de discussão.
-* Configuração de promoções e descontos.
-* Relatórios de faturamento e assinaturas.
+### Executar em Desenvolvimento
+```bash
+mvn spring-boot:run
+```
 
-## Tecnologias Envolvidas (Sugestão - A ser detalhado)
+### Build de Produção
+```bash
+mvn -DskipTests package
+java -jar target/fastdev-backend.jar
+```
 
-Esta seção será preenchida com as tecnologias específicas utilizadas no projeto. Exemplos:
+### Testes
+```bash
+mvn test
+```
 
-* **Frontend:** React, Next.js, Vue.js, Angular, HTML5, CSS3, JavaScript.
-* **Backend:** Node.js (Express), Python (Django/Flask), Ruby on Rails, PHP (Laravel), Java (Spring Boot), Go.
-* **Banco de Dados:** PostgreSQL, MongoDB, MySQL, Redis.
-* **Autenticação:** JWT, OAuth2.
-* **Cloud/Infraestrutura:** AWS, Google Cloud Platform (GCP), Microsoft Azure, Docker, Kubernetes.
-* **Versionamento:** Git, GitHub/GitLab/Bitbucket.
-* **Outros:** Ferramentas de CI/CD, sistemas de fila, etc.
+### Perfis
+```bash
+mvn spring-boot:run -Dspring-boot.run.profiles=dev
+```
+
+### Endpoints
+#### Autenticação
+`POST /auth/login`  
+Body:
+```json
+{
+  "login": "user",
+  "password": "minha-senha"
+}
+```
+Resposta 200:
+```json
+{
+  "token": "jwt"
+}
+```
+
+`POST /auth/register-visualizador`  
+Body:
+```json
+{
+  "nome": "Filipe",
+  "login": "user",
+  "password": "minha-senha",
+  "nomeCompleto": "Filipe Scandiani",
+  "telefone": "(22) 99999-0000"
+}
+```
+
+#### Vídeos
+`POST /videos`  
+Header: `Authorization: Bearer {jwt}`  
+Body:
+```json
+{
+  "tipo": "youtube",
+  "url": "https://www.youtube.com/watch?v=xxxxx",
+  "titulo": "Introdução",
+  "descricao": "Primeiro vídeo",
+  "nivelAcesso": "BASICO"
+}
+```
+
+`GET /videos`  
+Retorna a lista de vídeos permitidos para o usuário autenticado.
+
+#### Comentários
+`POST /comentarios/{videoId}`  
+Header: `Authorization: Bearer {jwt}`  
+Body:
+```json
+{
+  "texto": "Excelente conteúdo"
+}
+```
+
+### Autenticação e Segurança
+- Login retorna um JWT
+- Envie o token no header `Authorization` no formato `Bearer jwt`
+- O controle de acesso utiliza níveis em `nivelAcesso`
+
+### Validações de Entrada
+Os DTOs utilizam anotações como `@NotBlank`, `@Size`, `@Pattern`, `@URL` e `@NotNull`. Requisições inválidas retornam 400 com corpo padronizado.
+
+Exemplo de erro 400:
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/videos",
+  "timestamp": "2025-09-01T00:00:00Z",
+  "errors": [
+    { "field": "titulo", "message": "título obrigatório" }
+  ]
+}
+```
+
+### Estrutura de Pastas Sugerida
+```
+src/main/java/br/com/scandianx/fastdev/
+  config/
+  controller2/
+  dto/
+  entity/
+  repository/
+  service/
+  service/interfaces/
+src/main/resources/
+  application.properties
+  application-dev.properties
+```
+
+### Convenções de Commit
+- Conventional Commits
+- Mensagens curtas e imperativas
+
+### Troubleshooting
+- Erro de conexão: verifique `spring.datasource.*`
+- 401: verifique o header `Authorization`
+- Erros 400: valide os campos do JSON enviado
+
+### Roadmap
+- Paginação de vídeos
+- Soft delete de comentários
+- Upload de thumbnails
+
+### Licença
+Definir licença do projeto no repositório.
+
+---
+
+## EN
+
+### Overview
+FastDev Backend is a Java Spring Boot REST API for authentication, video management and comments, with access control based on levels. It targets a secure, scalable foundation for web and mobile apps.
+
+### Key Features
+- JWT authentication
+- Video create and list
+- Per-video comments
+- Jakarta Bean Validation
+- Layered architecture
+- CORS enabled
+
+### Stack
+- Java 21
+- Spring Boot 3.x
+- Spring Web, Spring Security, Validation
+- JPA/Hibernate
+- PostgreSQL, Oracle or H2
+- Maven
+
+### Clone
+```bash
+git clone https://github.com/Scandianx/fastdev-backend
+cd fastdev-backend
+```
+
+### Requirements
+- JDK 21
+- Maven 3.9+
+- Database running or H2 for development
+
+### Environment
+```properties
+server.port=8080
+spring.datasource.url=jdbc:postgresql://localhost:5432/fastdev
+spring.datasource.username=fastdev
+spring.datasource.password=fastdev
+spring.jpa.hibernate.ddl-auto=update
+spring.jpa.properties.hibernate.jdbc.time_zone=UTC
+api.security.token.secret=define-a-strong-secret
+```
+
+### Run Dev
+```bash
+mvn spring-boot:run
+```
+
+### Build
+```bash
+mvn -DskipTests package
+java -jar target/fastdev-backend.jar
+```
+
+### Tests
+```bash
+mvn test
+```
+
+### Endpoints
+Auth
+```http
+POST /auth/login
+```
+Videos
+```http
+POST /videos
+GET /videos
+```
+Comments
+```http
+POST /comentarios/{videoId}
+```
+
+### Error Example
+```json
+{
+  "status": 400,
+  "error": "Bad Request",
+  "path": "/videos",
+  "timestamp": "2025-09-01T00:00:00Z",
+  "errors": [
+    { "field": "titulo", "message": "título obrigatório" }
+  ]
+}
+```
+
