@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
 <head th:replace="fragments/layout :: head('FastDev - Login/Cadastro')"></head>
-<body style="background-color:#121212;color:#E0E0E0;line-height:1.6;margin:0;padding:20px 0 80px 0;min-height:calc(100vh - 100px);display:flex;justify-content:center;align-items:flex-start;">
-  <div class="auth-container" style="background-color:#222;padding:40px;border-radius:15px;width:100%;max-width:400px;box-shadow:0 10px 20px rgba(0,0,0,.5);margin-top:20px;">
+<body style="background-color:var(--bg);color:var(--text);line-height:1.6;margin:0;padding:20px 0 80px 0;min-height:calc(100vh - 100px);display:flex;justify-content:center;align-items:flex-start;">
+  <div class="auth-container" style="background-color:var(--panel);padding:40px;border-radius:15px;width:100%;max-width:400px;box-shadow:0 10px 20px rgba(0,0,0,.5);margin-top:20px;">
     
-    <div class="logo" style="font-size:28px;font-weight:bold;letter-spacing:1px;color:#E0E0E0;text-align:center;margin-bottom:30px;">
-      FAST<span style="color:#D32F2F;">D</span>EV
+    <div class="logo" style="font-size:28px;font-weight:bold;letter-spacing:1px;color:var(--text);text-align:center;margin-bottom:30px;">
+      FAST<span style="color:var(--brand);">D</span>EV
     </div>
 
     <!-- Mensagens globais -->
@@ -13,8 +13,8 @@
     <div th:if="${errorMessage}" th:text="${errorMessage}" style="background:#3b1d1d;color:#ffcaca;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
 
     <div class="tabs" style="display:flex;justify-content:space-around;margin-bottom:30px;">
-      <div id="tab-login" class="tab active" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:#B0BEC5;cursor:pointer;border-bottom:2px solid #D32F2F;">Login</div>
-      <div id="tab-register" class="tab" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:#B0BEC5;cursor:pointer;border-bottom:2px solid transparent;">Cadastro</div>
+      <div id="tab-login" class="tab active" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid var(--brand);">Login</div>
+      <div id="tab-register" class="tab" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid transparent;">Cadastro</div>
     </div>
 
     <!-- Login -->
@@ -81,7 +81,7 @@
     </div>
   </div>
 
-  <footer style="text-align:center;padding:20px;background:#1a1a1a;position:fixed;bottom:0;width:100%;font-size:14px;color:#B0BEC5;box-shadow:0 -2px 10px rgba(0,0,0,0.3);z-index:1000;">
+  <footer style="text-align:center;padding:20px;background:var(--panel-2);position:fixed;bottom:0;width:100%;font-size:14px;color:var(--text-secondary);box-shadow:0 -2px 10px rgba(0,0,0,0.3);z-index:1000;">
     <p style="margin:0;">FastDev © 2025 - Todos os direitos reservados</p>
   </footer>
 
@@ -90,24 +90,24 @@
       width: 100%;
       padding: 12px;
       border-radius: 5px;
-      border: 2px solid #333;
-      background-color: #333;
-      color: #E0E0E0;
+      border: 2px solid var(--line);
+      background-color: var(--panel-2);
+      color: var(--text);
       font-size: 16px;
       outline: none;
       transition: background .3s, border-color .3s;
     }
 
     .form-input:focus {
-      border-color: #D32F2F !important;
-      background-color: #2a2a2a !important;
+      border-color: var(--brand) !important;
+      background-color: var(--panel-3) !important;
     }
 
     .btn {
       display: block;
       width: 100%;
-      background: #D32F2F;
-      color: #E0E0E0;
+      background: var(--brand);
+      color: var(--text);
       padding: 12px;
       border: none;
       border-radius: 5px;
@@ -118,12 +118,12 @@
     }
 
     .btn:hover {
-      background: #b71c1c !important;
+      background: var(--brand-hover) !important;
       transform: translateY(-1px) !important;
     }
 
     .tab:hover {
-      color: #E0E0E0 !important;
+      color: var(--text) !important;
     }
 
     .form-container input.input-error {
@@ -146,14 +146,14 @@
     tabLogin.addEventListener('click', () => {
       loginBox.style.display = 'block';
       registerBox.style.display = 'none';
-      tabLogin.style.borderBottom = '2px solid #D32F2F';
+      tabLogin.style.borderBottom = '2px solid var(--brand)';
       tabRegister.style.borderBottom = '2px solid transparent';
     });
 
     tabRegister.addEventListener('click', () => {
       loginBox.style.display = 'none';
       registerBox.style.display = 'block';
-      tabRegister.style.borderBottom = '2px solid #D32F2F';
+      tabRegister.style.borderBottom = '2px solid var(--brand)';
       tabLogin.style.borderBottom = '2px solid transparent';
     });
   </script>

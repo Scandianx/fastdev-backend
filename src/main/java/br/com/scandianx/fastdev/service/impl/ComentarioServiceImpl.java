@@ -69,4 +69,27 @@ public class ComentarioServiceImpl implements ComentarioService {
             comentarioRepository.delete(comentario.get());
         }
     }
+
+    @Override
+    public ComentarioDTO atualizarComentario(HttpServletRequest request, Long comentarioId, String novoTexto) {
+        String token = request.getHeader("Authorization");
+        Usuario usuario = authorizationService.findUserByToken(token);
+        if (usuario == null) {
+            return null;
+        }
+
+        Optional<Comentario> comentarioOpt = comentarioRepository.findById(comentarioId);
+        if (comentarioOpt.isEmpty()) {
+            return null;
+        }
+
+        Comentario comentario = comentarioOpt.get();
+        if (!comentario.getUsuario().getId().equals(usuario.getId())) {
+            return null;
+        }
+
+        comentario.setTexto(novoTexto);
+        Comentario salvo = comentarioRepository.save(comentario);
+        return converter.toDTO(salvo);
+    }
 }

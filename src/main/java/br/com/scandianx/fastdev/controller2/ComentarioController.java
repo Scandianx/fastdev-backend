@@ -38,5 +38,15 @@ public class ComentarioController {
         comentarioService.removerComentario(request, comentarioId);
         return ResponseEntity.ok("Comentário excluido com sucesso");
     }
+    @PutMapping("/{comentarioId}")
+    public ResponseEntity<ComentarioDTO> atualizar(@PathVariable Long comentarioId,
+                                                   @RequestBody ComentarioRequestDTO dto,
+                                                   HttpServletRequest request) {
+        ComentarioDTO updated = comentarioService.atualizarComentario(request, comentarioId, dto.texto());
+        if (updated == null) {
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(updated);
+    }
 }
 

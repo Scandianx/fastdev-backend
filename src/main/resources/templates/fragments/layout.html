@@ -4,6 +4,37 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title th:text="${title}">FastDev</title>
+  <style>
+    :root{
+      --bg:#0b0f14;
+      --panel:#0f141b;
+      --panel-2:#121924;
+      --panel-3:#16202d;
+      --line:#1b2533;
+      --line-light:#233044;
+      --text:#E6F1FF;
+      --text-secondary:#A8B3C7;
+      --muted:#7C8EA3;
+      --brand:#00C2FF;
+      --brand-hover:#00A4E4;
+      --brand-glow:rgba(0,194,255,0.35);
+      --success:#00FFA3;
+      --blue:#33C3FF;
+    }
+
+    html, body { background: var(--bg); color: var(--text); }
+
+    #q { background: var(--panel) !important; color: var(--text) !important; border-color: var(--line) !important; }
+    header a { background: var(--panel-2) !important; color: var(--text) !important; }
+    a[href="#grid"] { background: var(--brand) !important; color: var(--text) !important; }
+    section h1 { color: var(--text) !important; }
+    section p { color: var(--text-secondary) !important; }
+    a.card { background: var(--panel) !important; border-color: var(--line) !important; color: var(--text) !important; }
+    a.card > div:first-child { background: var(--panel-2) !important; }
+    a.card .title { color: var(--text) !important; }
+    a.card div span:first-child { color: var(--text-secondary) !important; }
+    a.card div span:last-child { background: var(--brand) !important; color:#fff !important; }
+  </style>
 </head>
 <body>
 <header th:fragment="header"></header>
