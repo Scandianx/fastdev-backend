@@ -82,7 +82,8 @@
 
     async function loadVideo(){
       if(!videoId){ return; }
-      const res = await fetch(`/api/v1/videos/${videoId}`);
+      const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+      const res = await fetch(`/api/v1/videos/${videoId}`, { headers });
       if(!res.ok){ tituloEl.textContent = 'Vídeo não encontrado'; return; }
       const v = await res.json();
       tituloEl.textContent = v.titulo || 'Sem título';
@@ -100,7 +101,8 @@
     async function loadComments(){
       if(!videoId){ listEl.innerHTML=''; return; }
       try{
-        const res = await fetch(`/api/v1/videos/${videoId}/comentarios`);
+        const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+        const res = await fetch(`/api/v1/videos/${videoId}/comentarios`, { headers });
         if(!res.ok){ listEl.innerHTML=''; return; }
         const data = await res.json();
         listEl.innerHTML = data.map(c=>`
@@ -167,4 +169,3 @@
   </script>
 </body>
 </html>
-

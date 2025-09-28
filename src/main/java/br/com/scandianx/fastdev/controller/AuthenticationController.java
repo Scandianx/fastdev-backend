@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.ProblemDetail;
 
 @CrossOrigin(origins = "*")
 @RestController
@@ -29,13 +30,13 @@ public class AuthenticationController {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(responseCode = "400", description = "Invalid username supplied",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "401", description = "Credenciais inválidas",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "422", description = "Regra de negócio violada",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<LoginResponseDTO> login(@RequestBody @jakarta.validation.Valid AuthenticationDTO data) {
         return authenticationService.login(data);
@@ -47,10 +48,10 @@ public class AuthenticationController {
         @ApiResponse(responseCode = "201", description = "Criado"),
         @ApiResponse(responseCode = "400", description = "Dados inválidos",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "422", description = "Regra de negócio violada",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<String> registerVisualizador(@RequestBody @jakarta.validation.Valid RegisterDTO data) {
         ResponseEntity<String> resp = authenticationService.register(data);

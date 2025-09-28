@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/usuarios")
@@ -47,7 +48,7 @@ public class UsuarioController {
         @ApiResponse(responseCode = "200", description = "OK"),
         @ApiResponse(responseCode = "404", description = "Usuário não encontrado")
     })
-    public ResponseEntity<Usuario> atualizarParcial(@PathVariable Long id, @RequestBody @jakarta.validation.Valid UpdateUsuarioDTO dto){
+    public ResponseEntity<Usuario> atualizarParcial(@PathVariable Long id, @RequestBody @Valid UpdateUsuarioDTO dto){
         Optional<Usuario> opt = usuarioRepository.findById(id);
         if(opt.isEmpty()) return ResponseEntity.notFound().build();
         Usuario u = opt.get();

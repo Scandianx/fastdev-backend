@@ -23,8 +23,8 @@ public class Visualizador extends Usuario{
         if (getRole() == UsuarioRole.ADMIN) return true;
 
         return switch (nivelAcesso) {
-            case BRDEV -> getRole() == UsuarioRole.BRDEV || getRole() == UsuarioRole.GRINGADEV;
-            case GRINGADEV -> getRole() == UsuarioRole.GRINGADEV;
+            case BRLDEV -> getRole() == UsuarioRole.BRLDEV || getRole() == UsuarioRole.USDEV;
+            case USDEV -> getRole() == UsuarioRole.USDEV;
             case FREE -> true;
             case PRIVATE -> false;
         };

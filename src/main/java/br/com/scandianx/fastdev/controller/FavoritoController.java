@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.ProblemDetail;
 
 @RestController
 @RequestMapping("/api/v1/favoritos")
@@ -30,13 +31,13 @@ public class FavoritoController {
         @ApiResponse(responseCode = "201", description = "Criado"),
         @ApiResponse(responseCode = "400", description = "Dados inválidos",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "401", description = "Não autenticado",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "404", description = "Vídeo não encontrado",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<FavoritoDTO> adicionar(@PathVariable Long videoId, HttpServletRequest request) {
         FavoritoDTO favorito = favoritosService.adicionarFavorito(request, videoId);
@@ -60,10 +61,10 @@ public class FavoritoController {
         @ApiResponse(responseCode = "204", description = "Removido"),
         @ApiResponse(responseCode = "401", description = "Não autenticado",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                schema = @Schema(implementation = ProblemDetail.class))),
         @ApiResponse(responseCode = "404", description = "Favorito não encontrado",
             content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<Void> remover(@PathVariable Long videoId, HttpServletRequest request) {
         favoritosService.removerFavorito(request, videoId);

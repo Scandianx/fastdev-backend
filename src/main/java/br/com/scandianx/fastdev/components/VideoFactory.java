@@ -7,6 +7,7 @@ import br.com.scandianx.fastdev.dto.VideoRequestDTO;
 import br.com.scandianx.fastdev.entity.VideoAbstrato;
 import br.com.scandianx.fastdev.entity.VideoYoutube;
 import br.com.scandianx.fastdev.repository.interfaces.VideoYoutubeRepository;
+import br.com.scandianx.fastdev.exception.RegraDeNegocioException;
 
 @Component
 public class VideoFactory {
@@ -15,6 +16,9 @@ public class VideoFactory {
     private VideoYoutubeRepository youtubeRepo;
 
     public VideoAbstrato createAndSaveVideo(VideoRequestDTO dto) {
+        if (dto.getNivelAcesso() == null) {
+            throw new RegraDeNegocioException("Nível de acesso é obrigatório");
+        }
         String tipo = dto.getTipo().toLowerCase();
         
         if (tipo.equals("youtube")) {

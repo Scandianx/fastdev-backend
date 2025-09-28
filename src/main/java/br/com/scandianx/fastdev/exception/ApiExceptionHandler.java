@@ -13,7 +13,10 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(RecursoNaoEncontradoException.class)
     public ProblemDetail handleNotFound(RecursoNaoEncontradoException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        String msg = ex.getMessage();
+        ProblemDetail pd = (msg != null && !msg.isBlank())
+                ? ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, msg)
+                : ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
         pd.setType(URI.create("about:blank#recurso-nao-encontrado"));
         pd.setTitle("Recurso não encontrado");
         return pd;
@@ -21,7 +24,10 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(NaoAutorizadoException.class)
     public ProblemDetail handleUnauthorized(NaoAutorizadoException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, ex.getMessage());
+        String msg = ex.getMessage();
+        ProblemDetail pd = (msg != null && !msg.isBlank())
+                ? ProblemDetail.forStatusAndDetail(HttpStatus.UNAUTHORIZED, msg)
+                : ProblemDetail.forStatus(HttpStatus.UNAUTHORIZED);
         pd.setType(URI.create("about:blank#nao-autorizado"));
         pd.setTitle("Não autorizado");
         return pd;
@@ -29,7 +35,10 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(PermissaoNegadaException.class)
     public ProblemDetail handleForbidden(PermissaoNegadaException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, ex.getMessage());
+        String msg = ex.getMessage();
+        ProblemDetail pd = (msg != null && !msg.isBlank())
+                ? ProblemDetail.forStatusAndDetail(HttpStatus.FORBIDDEN, msg)
+                : ProblemDetail.forStatus(HttpStatus.FORBIDDEN);
         pd.setType(URI.create("about:blank#permissao-negada"));
         pd.setTitle("Permissão negada");
         return pd;
@@ -37,7 +46,10 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(RegraDeNegocioException.class)
     public ProblemDetail handleBusiness(RegraDeNegocioException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, ex.getMessage());
+        String msg = ex.getMessage();
+        ProblemDetail pd = (msg != null && !msg.isBlank())
+                ? ProblemDetail.forStatusAndDetail(HttpStatus.UNPROCESSABLE_ENTITY, msg)
+                : ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         pd.setType(URI.create("about:blank#regra-de-negocio"));
         pd.setTitle("Regra de negócio violada");
         return pd;
@@ -48,8 +60,10 @@ public class ApiExceptionHandler {
         String detail = ex.getBindingResult().getFieldErrors().stream()
                 .map(err -> err.getField() + ": " + err.getDefaultMessage())
                 .findFirst()
-                .orElse("Dados inválidos");
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail);
+                .orElse(null);
+        ProblemDetail pd = (detail != null && !detail.isBlank())
+                ? ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, detail)
+                : ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
         pd.setType(URI.create("about:blank#validacao"));
         pd.setTitle("Erro de validação");
         return pd;
@@ -57,7 +71,10 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler(RuntimeException.class)
     public ProblemDetail handleGeneric(RuntimeException ex) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, "Erro interno do servidor");
+        String msg = ex.getMessage();
+        ProblemDetail pd = (msg != null && !msg.isBlank())
+                ? ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, msg)
+                : ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         pd.setType(URI.create("about:blank#erro-interno"));
         pd.setTitle("Erro interno");
         return pd;

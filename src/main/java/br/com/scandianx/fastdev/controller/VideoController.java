@@ -21,6 +21,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.ProblemDetail;
 import org.springframework.validation.annotation.Validated;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -43,16 +44,11 @@ public class VideoController {
     @PostMapping
     @Operation(summary = "Criar vídeo")
     @ApiResponses({
-        @ApiResponse(responseCode = "201", description = "Criado"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
-        @ApiResponse(responseCode = "401", description = "Não autenticado",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
-        @ApiResponse(responseCode = "422", description = "Regra de negócio violada",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+            @ApiResponse(responseCode = "201", description = "Criado"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "401", description = "Não autenticado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "422", description = "Regra de negócio violada", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "403", description = "Você não tem permissão pra criar um vídeo", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<VideoAbstrato> criarVideo(@RequestBody @jakarta.validation.Valid VideoRequestDTO dto) {
         VideoAbstrato video = videoService.criarVideo(dto);
@@ -63,7 +59,7 @@ public class VideoController {
     @GetMapping
     @Operation(summary = "Listar vídeos permitidos ao usuário")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK")
+            @ApiResponse(responseCode = "200", description = "OK")
     })
     public List<VideoAbstrato> listarPermitidos(HttpServletRequest request) {
         return videoService.listarPermitidos(request);
@@ -72,10 +68,8 @@ public class VideoController {
     @GetMapping("/search")
     @Operation(summary = "Buscar vídeos por título (apenas permitidos)")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(responseCode = "400", description = "Parâmetro inválido",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Parâmetro inválido", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<List<VideoAbstrato>> buscarPorTitulo(
             @RequestParam("titulo") @NotBlank(message = "titulo obrigatório") @Size(min = 2, max = 120, message = "titulo deve ter entre 2 e 120 caracteres") String titulo,
@@ -87,10 +81,8 @@ public class VideoController {
     @GetMapping("/top")
     @Operation(summary = "Listar vídeos mais favoritados (apenas permitidos)")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(responseCode = "400", description = "Parâmetro inválido",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Parâmetro inválido", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<List<VideoAbstrato>> listarMaisFavoritados(
             @RequestParam(name = "limit", defaultValue = "10") @Min(value = 1, message = "limit mínimo é 1") @Max(value = 100, message = "limit máximo é 100") int limit,
@@ -102,15 +94,13 @@ public class VideoController {
     @GetMapping("/{id}")
     @Operation(summary = "Obter vídeo por ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(responseCode = "404", description = "Vídeo não encontrado",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "Vídeo não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
-    public ResponseEntity<VideoDTO> obterPorId(@PathVariable Long id){
-        try{
+    public ResponseEntity<VideoDTO> obterPorId(@PathVariable Long id) {
+        try {
             return ResponseEntity.ok(converter.toDTO(videoService.obterPorId(id)));
-        }catch(jakarta.persistence.EntityNotFoundException e){
+        } catch (jakarta.persistence.EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -118,19 +108,16 @@ public class VideoController {
     @PutMapping("/{id}")
     @Operation(summary = "Atualizar vídeo por ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "200", description = "OK"),
-        @ApiResponse(responseCode = "400", description = "Dados inválidos",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
-        @ApiResponse(responseCode = "404", description = "Vídeo não encontrado",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Dados inválidos", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class))),
+            @ApiResponse(responseCode = "404", description = "Vídeo não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = ProblemDetail.class)))
     })
-    public ResponseEntity<VideoAbstrato> atualizar(@PathVariable Long id, @RequestBody @jakarta.validation.Valid VideoRequestDTO dto){
-        try{
+    public ResponseEntity<VideoAbstrato> atualizar(@PathVariable Long id,
+            @RequestBody @jakarta.validation.Valid VideoRequestDTO dto) {
+        try {
             VideoAbstrato atualizado = videoService.atualizarVideo(id, dto);
             return ResponseEntity.ok(atualizado);
-        }catch(EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }
@@ -138,16 +125,14 @@ public class VideoController {
     @DeleteMapping("/{id}")
     @Operation(summary = "Remover vídeo por ID")
     @ApiResponses({
-        @ApiResponse(responseCode = "204", description = "Removido"),
-        @ApiResponse(responseCode = "404", description = "Vídeo não encontrado",
-            content = @Content(mediaType = "application/json",
-                schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+            @ApiResponse(responseCode = "204", description = "Removido"),
+            @ApiResponse(responseCode = "404", description = "Vídeo não encontrado", content = @Content(mediaType = "application/json", schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
     })
-    public ResponseEntity<Void> deletar(@PathVariable Long id){
-        try{
+    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+        try {
             videoService.deletarVideo(id);
             return ResponseEntity.noContent().build();
-        }catch(EntityNotFoundException e){
+        } catch (EntityNotFoundException e) {
             return ResponseEntity.notFound().build();
         }
     }

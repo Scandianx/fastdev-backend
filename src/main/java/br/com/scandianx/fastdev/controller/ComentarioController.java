@@ -6,6 +6,7 @@ import br.com.scandianx.fastdev.service.interfaces.ComentarioService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.http.ProblemDetail;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -35,16 +36,16 @@ public class ComentarioController {
             @ApiResponse(responseCode = "201", description = "Criado"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "401", description = "Não autenticado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "404", description = "Vídeo não encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "422", description = "Regra de negócio violada",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                            schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<ComentarioDTO> criar(@PathVariable Long videoId,
                                                @RequestBody @Valid ComentarioRequestDTO dto,
@@ -60,7 +61,7 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Vídeo não encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                            schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<List<ComentarioDTO>> listarPorVideo(@PathVariable Long videoId) {
         List<ComentarioDTO> list = comentarioService.listarComentariosPorVideo(videoId);
@@ -73,7 +74,7 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "404", description = "Comentário não encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                            schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<ComentarioDTO> obter(@PathVariable Long comentarioId) {
         ComentarioDTO dto = comentarioService.obterComentario(comentarioId);
@@ -86,16 +87,16 @@ public class ComentarioController {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "Dados inválidos",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "401", description = "Não autenticado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "403", description = "Sem permissão",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "404", description = "Comentário não encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                            schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<ComentarioDTO> atualizar(@PathVariable Long comentarioId,
                                                    @RequestBody @Valid ComentarioRequestDTO dto,
@@ -110,13 +111,13 @@ public class ComentarioController {
             @ApiResponse(responseCode = "204", description = "Removido"),
             @ApiResponse(responseCode = "401", description = "Não autenticado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
+                            schema = @Schema(implementation = ProblemDetail.class))),
             @ApiResponse(responseCode = "403", description = "Sem permissão",
                     content = @Content(mediaType = "application/json",
                             schema = @Schema(implementation = org.springframework.http.ProblemDetail.class))),
             @ApiResponse(responseCode = "404", description = "Comentário não encontrado",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = org.springframework.http.ProblemDetail.class)))
+                            schema = @Schema(implementation = ProblemDetail.class)))
     })
     public ResponseEntity<Void> deletar(@PathVariable Long comentarioId,
                                         HttpServletRequest request) {

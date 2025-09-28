@@ -2,6 +2,7 @@ package br.com.scandianx.fastdev.repository.impl;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -14,15 +15,13 @@ import br.com.scandianx.fastdev.repository.interfaces.VideoRepository;
 public interface VideoRepositoryImpl 
         extends JpaRepository<VideoAbstrato, Long>, VideoRepository {
 
+    boolean existsByTituloIgnoreCase(String titulo);
+
     @Override
-    @Query(value = "select * from tvideo_base v \n" +
-            "where lower(v.titulo) like lower(concat('%', :termo, '%')) \n" +
-            "order by v.dt_criacao desc", nativeQuery = true)
+    @Query("select v from VideoAbstrato v where lower(v.titulo) like lower(concat('%', :termo, '%')) order by v.dtCriacao desc")
     List<VideoAbstrato> buscarPorTituloSimilar(@Param("termo") String termo);
 
     @Override
-    @Query(value = "select v.* from tvideo_base v \n" +
-            "join (select f.video_id as vid, count(f.id) as favs from tvideos_favoritos f group by f.video_id order by favs desc limit :lim) t on t.vid = v.id \n" +
-            "order by t.favs desc", nativeQuery = true)
-    List<VideoAbstrato> buscarMaisFavoritados(@Param("lim") int limite);
+    @Query("select v from VideoAbstrato v left join Favorito f on f.video = v group by v order by count(f) desc")
+    List<VideoAbstrato> buscarMaisFavoritados(Pageable pageable);
 }

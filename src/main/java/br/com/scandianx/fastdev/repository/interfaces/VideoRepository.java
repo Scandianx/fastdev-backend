@@ -2,6 +2,7 @@ package br.com.scandianx.fastdev.repository.interfaces;
 
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Pageable;
 
 import br.com.scandianx.fastdev.entity.VideoAbstrato;
 
@@ -10,5 +11,5 @@ public interface VideoRepository {
     Optional<VideoAbstrato> findById(Long id);
 
     List<VideoAbstrato> buscarPorTituloSimilar(String termo);
-    List<VideoAbstrato> buscarMaisFavoritados(int limite);
+    List<VideoAbstrato> buscarMaisFavoritados(Pageable pageable);
 }
