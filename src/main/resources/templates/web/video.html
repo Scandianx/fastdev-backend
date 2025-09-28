@@ -1,14 +1,13 @@
-﻿
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('CodeMy - Assistir VÃ­deo')}"></head>
+<head th:replace="~{fragments/layout :: head('CodeMy - Assistir Vídeo')}"></head>
 <body style="background:var(--bg);color:var(--text);margin:0;">
 
   <header class="sticky" style="position:sticky;top:0;z-index:100;background:rgba(10,10,11,0.8);backdrop-filter:blur(16px);padding:16px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;">
     <div class="brand" style="font-weight:900;font-size:24px;letter-spacing:-0.5px;">CODE<span style="background: linear-gradient(135deg, var(--brand) 0%, #C4B5FD 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">MY</span></div>
     <div style="display:flex;gap:12px;align-items:center">
-      <a href="/web" class="btn ghost" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--text)">âŸµ Voltar</a>
-      <a href="/auth-web" class="btn ghost" onclick="localStorage.removeItem('CodeMy_token')" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--text)">Sair</a>
+      <a href="/web" class="btn ghost" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--text)">Voltar</a>
+      <a href="/auth-web" class="btn ghost" onclick="localStorage.removeItem('fastdev_token')" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--text)">Sair</a>
     </div>
   </header>
 
@@ -28,13 +27,13 @@
       </div>
 
       <section class="panel elev comments" style="background:rgba(15,15,17,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;">
-        <h2 style="margin:0 0 16px 0;font-size:18px;font-weight:700">ComentÃ¡rios</h2>
+        <h2 style="margin:0 0 16px 0;font-size:18px;font-weight:700">Comentários</h2>
         <ul id="commentsList" class="c-list" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px"></ul>
         <form id="commentForm" autocomplete="off" style="margin-top:12px">
-          <textarea id="commentText" class="input" rows="3" maxlength="500" placeholder="Escreva um comentÃ¡rio..." style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(20,20,23,0.6);color:var(--text);"></textarea>
+          <textarea id="commentText" class="input" rows="3" maxlength="500" placeholder="Escreva um comentário..." style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(20,20,23,0.6);color:var(--text);"></textarea>
           <div class="form-row" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;margin-top:8px">
             <span id="charCount" class="char" style="font-size:12px;color:var(--muted);margin-right:auto;font-weight:500">0/500</span>
-            <button type="submit" class="btn" style="background:linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);color:#fff;border:none;padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px">Enviar comentÃ¡rio</button>
+            <button type="submit" class="btn" style="background:linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);color:#fff;border:none;padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px">Enviar comentário</button>
           </div>
         </form>
       </section>
@@ -54,7 +53,7 @@
 
     const params=new URLSearchParams(location.search);
     const videoId=params.get('id');
-    const token=localStorage.getItem('CodeMy_token');
+    const token=localStorage.getItem('fastdev_token');
     const listEl = $('#commentsList');
     const form = $('#commentForm');
     const textInput = $('#commentText');
@@ -84,12 +83,12 @@
     async function loadVideo(){
       if(!videoId){ return; }
       const res = await fetch(`/api/v1/videos/${videoId}`);
-      if(!res.ok){ tituloEl.textContent = 'VÃ­deo nÃ£o encontrado'; return; }
+      if(!res.ok){ tituloEl.textContent = 'Vídeo não encontrado'; return; }
       const v = await res.json();
-      tituloEl.textContent = v.titulo || 'Sem tÃ­tulo';
+      tituloEl.textContent = v.titulo || 'Sem título';
       chipNivel.textContent = v.nivelAcesso || '';
       player.src = toEmbed(v.url || '');
-      // Exibe descriÃ§Ã£o do vÃ­deo
+      // Exibe descrição do vídeo
       descEl.textContent = v.descricao || '';
       return v;
     }
@@ -108,7 +107,7 @@
           <li style="display:flex;gap:10px">
             <div style="flex:0 0 42px;height:42px;border-radius:50%;background:linear-gradient(135deg, var(--brand) 0%, #C4B5FD 100%);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff">${escapeHtml((c.nomeUsuario||'V').charAt(0).toUpperCase())}</div>
             <div style="flex:1;background:rgba(20,20,23,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px">
-              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px"><strong style="color:var(--text)">${escapeHtml(c.nomeUsuario||'')}</strong> Â· <span>${timeAgoFromIso(c.criadoEm)}</span></div>
+              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px"><strong style="color:var(--text)">${escapeHtml(c.nomeUsuario||'')}</strong> • <span>${timeAgoFromIso(c.criadoEm)}</span></div>
               <div style="color:var(--text)">${linkify(escapeHtml(c.texto||''))}</div>
             </div>
           </li>
@@ -120,8 +119,8 @@
       e.preventDefault();
       const txt = textInput.value.trim();
       if(!txt){ toast('Escreva algo antes de enviar'); return; }
-      if(!token){ toast('FaÃ§a login para comentar'); return; }
-      if(!videoId){ toast('VÃ­deo invÃ¡lido'); return; }
+      if(!token){ toast('Faça login para comentar'); return; }
+      if(!videoId){ toast('Vídeo inválido'); return; }
       try{
         const res = await fetch(`/api/v1/videos/${videoId}/comentarios`, {
           method:'POST',
@@ -131,7 +130,7 @@
         if(!res.ok){ const err=await res.json().catch(()=>({})); toast(err.detail||'Falha ao publicar'); return; }
         textInput.value=''; charCount.textContent='0/500';
         await loadComments();
-        toast('ComentÃ¡rio publicado!');
+        toast('Comentário publicado!');
       }catch{ toast('Erro de rede'); }
     });
 
@@ -148,8 +147,8 @@
     function syncFavUI(state){ favBtn.classList.toggle('active', state); favBtn.textContent = state ? 'Favoritado' : 'Favoritar'; }
 
     favBtn.addEventListener('click', async ()=>{
-      if(!token){ toast('FaÃ§a login para favoritar'); return; }
-      if(!videoId){ toast('VÃ­deo invÃ¡lido'); return; }
+      if(!token){ toast('Faça login para favoritar'); return; }
+      if(!videoId){ toast('Vídeo inválido'); return; }
       const atual = favBtn.classList.contains('active');
       try{
         const res = await fetch(`/api/v1/favoritos/${videoId}`, { method: atual? 'DELETE':'POST', headers:{ 'Authorization':`Bearer ${token}`}});
@@ -161,7 +160,7 @@
 
     $('#copyBtn').addEventListener('click', async ()=>{
       try{ await navigator.clipboard.writeText(location.href); toast('Link copiado!'); }
-      catch{ toast('NÃ£o foi possÃ­vel copiar'); }
+      catch{ toast('Não foi possível copiar'); }
     });
 
     (async ()=>{ await loadVideo(); syncFavUI(await getFavState()); await loadComments(); })();
