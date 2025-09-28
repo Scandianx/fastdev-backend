@@ -1,46 +1,90 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout :: head('FastDev - Home')"></head>
+<head th:replace="fragments/layout :: head('CodeMy - Home')"></head>
 <body style="background-color:var(--bg);color:var(--text);min-height:100vh;margin:0;">
 <header style="padding:16px 20px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;">
-  <div style="font-weight:700;letter-spacing:1px;">FAST<span style="color:var(--brand);">D</span>EV</div>
+  <div style="font-weight:700;letter-spacing:1px;">CODE<span style="color:var(--brand);">M</span>Y</div>
   <div style="display:flex;gap:12px;align-items:center;">
     <input id="q" type="text" placeholder="Buscar vídeos..." style="background:#1e1e1e;color:#e0e0e0;border:1px solid #2a2a2a;border-radius:8px;padding:10px 12px;min-width:260px;outline:none;">
     <a href="/auth-web" onclick="localStorage.removeItem('fastdev_token')" style="background:#333;border:none;color:#E0E0E0;border-radius:8px;padding:10px 14px;text-decoration:none;">Sair</a>
   </div>
-</header>
+  </header>
 
 <section style="background:url('https://images.unsplash.com/photo-1517694712202-14dd9538aa97?q=80&w=1600&auto=format&fit=crop') center/cover no-repeat;height:360px;display:flex;align-items:center;justify-content:center;text-align:center;position:relative;">
   <div style="position:absolute;inset:0;background:rgba(0,0,0,.7);"></div>
   <div style="position:relative;z-index:1;padding:20px;max-width:700px;">
     <h1 style="font-size:40px;color:#E0E0E0;margin-bottom:12px;">Entre no mercado esse ano ainda</h1>
     <p style="font-size:18px;color:#B0BEC5;margin:0 0 16px 0;">Domine tecnologias de ponta com cursos práticos e atualizados.</p>
-    <a href="#grid" style="display:inline-block;background:#D32F2F;color:#E0E0E0;padding:12px 25px;border-radius:6px;text-decoration:none;font-weight:700;">Explorar Cursos</a>
+    <a href="#grid" style="display:inline-block;background:var(--brand);color:#E0E0E0;padding:12px 25px;border-radius:6px;text-decoration:none;font-weight:700;">Explorar Cursos</a>
   </div>
 </section>
 
 <main style="max-width:1200px;margin:32px auto;padding:0 20px;">
   <h2 style="font-size:24px;margin-bottom:16px;">Vídeos disponíveis</h2>
-  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;">
-    <div th:if="${#lists.isEmpty(videos)}" style="grid-column:1/-1;color:#B0BEC5;">Nenhum vídeo disponível.</div>
-    <div th:each="video : ${videos}">
-      <div th:replace="fragments/video :: videoCard(video=${video})"></div>
-    </div>
-  </div>
+  <div id="grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:20px;"></div>
 </main>
 
 <footer th:replace="fragments/layout :: footer"></footer>
 
 <script>
-  const q=document.getElementById('q')
-  const grid=document.getElementById('grid')
-  q.addEventListener('input',()=>{
-    const term=q.value.toLowerCase()
-    grid.querySelectorAll('a.card').forEach(card=>{
-      const title=card.querySelector('.title').textContent.toLowerCase()
-      card.style.display=title.includes(term)?'block':'none'
-    })
-  })
+  const q = document.getElementById('q');
+  const grid = document.getElementById('grid');
+  const token = localStorage.getItem('fastdev_token');
+
+  function cardHtml(v){
+    const id = v.id;
+    const titulo = v.titulo || 'Título';
+    const nivel = v.nivelAcesso || '';
+    return `
+      <a class="card" href="/web/video?id=${encodeURIComponent(id)}" style="display:block;background:var(--panel);border:1px solid var(--line);border-radius:14px;overflow:hidden;text-decoration:none;color:var(--text);transition:transform .2s;">
+        <div style=\"aspect-ratio:16/9;background:var(--panel-2);display:flex;align-items:center;justify-content:center;\">
+          <img src=\"/images/thumb-placeholder.png\" alt=\"\" style=\"width:100%;height:100%;object-fit:cover;\">
+        </div>
+        <div style=\"padding:14px;\">
+          <div class=\"title\" style=\"font-weight:700;font-size:16px;line-height:1.3;\">${titulo}</div>
+          <div style=\"display:flex;justify-content:space-between;align-items:center;margin-top:12px;\">
+            <span style=\"font-size:12px;color:#B0BEC5;\">${nivel}</span>
+            <span style=\"background:var(--brand);color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;\">Assistir</span>
+          </div>
+        </div>
+      </a>
+    `;
+  }
+
+  async function fetchVideos(term){
+    const headers = token ? { 'Authorization': `Bearer ${token}` } : {};
+    let url = '/api/v1/videos';
+    if(term && term.trim().length >= 1){
+      const qs = new URLSearchParams({ titulo: term.trim() });
+      url = `/api/v1/videos/search?${qs.toString()}`;
+    }
+    const res = await fetch(url, { headers });
+    if(!res.ok){ throw new Error('Falha ao buscar vídeos'); }
+    return res.json();
+  }
+
+  function renderList(list){
+    if(!Array.isArray(list) || list.length === 0){
+      grid.innerHTML = '<div style="grid-column:1/-1;color:#B0BEC5;">Nenhum vídeo disponível.</div>';
+      return;
+    }
+    grid.innerHTML = list.map(cardHtml).join('');
+  }
+
+  let debounce;
+  q.addEventListener('input', ()=>{
+    const term = q.value;
+    clearTimeout(debounce);
+    debounce = setTimeout(async ()=>{
+      try{ renderList(await fetchVideos(term)); }
+      catch{ renderList([]); }
+    }, 250);
+  });
+
+  (async ()=>{
+    try{ renderList(await fetchVideos('')); }
+    catch{ renderList([]); }
+  })();
 </script>
 </body>
 </html>

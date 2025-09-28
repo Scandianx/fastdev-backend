@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="fragments/layout :: head('FastDev - Login/Cadastro')"></head>
+<head th:replace="fragments/layout :: head('CodeMy - Login/Cadastro')"></head>
 <body style="background-color:var(--bg);color:var(--text);line-height:1.6;margin:0;padding:20px 0 80px 0;min-height:calc(100vh - 100px);display:flex;justify-content:center;align-items:flex-start;">
   <div class="auth-container" style="background-color:var(--panel);padding:40px;border-radius:15px;width:100%;max-width:400px;box-shadow:0 10px 20px rgba(0,0,0,.5);margin-top:20px;">
     
     <div class="logo" style="font-size:28px;font-weight:bold;letter-spacing:1px;color:var(--text);text-align:center;margin-bottom:30px;">
-      FAST<span style="color:var(--brand);">D</span>EV
+      CODE<span style="color:var(--brand);">M</span>Y
     </div>
 
     <!-- Mensagens globais -->
-    <div th:if="${successMessage}" th:text="${successMessage}" style="background:#1d3b24;color:#caffd2;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
-    <div th:if="${errorMessage}" th:text="${errorMessage}" style="background:#3b1d1d;color:#ffcaca;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
+    <div id="globalSuccess" style="display:none;background:#1d3b24;color:#caffd2;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
+    <div id="globalError" style="display:none;background:#3b1d1d;color:#ffcaca;padding:10px;border-radius:6px;margin-bottom:12px;"></div>
 
     <div class="tabs" style="display:flex;justify-content:space-around;margin-bottom:30px;">
       <div id="tab-login" class="tab active" style="flex:1;text-align:center;padding:10px 0;font-size:18px;color:var(--text-secondary);cursor:pointer;border-bottom:2px solid var(--brand);">Login</div>
@@ -19,19 +19,17 @@
 
     <!-- Login -->
     <div id="login" class="form-container active">
-      <form th:action="@{/auth-web/login}" th:object="${loginDTO}" method="post">
+      <form id="loginForm">
         <div class="form-group" style="margin-bottom:20px;">
           <label>Login</label>
-          <input type="text" th:field="*{login}" class="form-input" placeholder="Digite seu login" required
-                 th:classappend="${#fields.hasErrors('login')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error-msg"></div>
+          <input id="login_login" type="text" class="form-input" placeholder="Digite seu login" required/>
+          <div id="login_login_err" class="error-msg" style="display:none"></div>
         </div>
 
         <div class="form-group" style="margin-bottom:20px;">
           <label>Senha</label>
-          <input type="password" th:field="*{password}" class="form-input" placeholder="Digite sua senha" required
-                 th:classappend="${#fields.hasErrors('password')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-msg"></div>
+          <input id="login_password" type="password" class="form-input" placeholder="Digite sua senha" required/>
+          <div id="login_password_err" class="error-msg" style="display:none"></div>
         </div>
 
         <button type="submit" class="btn">Entrar</button>
@@ -40,40 +38,35 @@
 
     <!-- Cadastro -->
     <div id="register" class="form-container" style="display:none;">
-      <form th:action="@{/auth-web/register}" th:object="${registerDTO}" method="post">
+      <form id="registerForm">
         <div class="form-group" style="margin-bottom:20px;">
           <label>Nome *</label>
-          <input type="text" th:field="*{nome}" class="form-input" placeholder="Digite seu nome" required
-                 th:classappend="${#fields.hasErrors('nome')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}" class="error-msg"></div>
+          <input id="reg_nome" type="text" class="form-input" placeholder="Digite seu nome" required/>
+          <div id="reg_nome_err" class="error-msg" style="display:none"></div>
         </div>
 
         <div class="form-group" style="margin-bottom:20px;">
           <label>Email *</label>
-          <input type="text" th:field="*{login}" class="form-input" placeholder="Seu login" required
-                 th:classappend="${#fields.hasErrors('login')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('login')}" th:errors="*{login}" class="error-msg"></div>
+          <input id="reg_login" type="text" class="form-input" placeholder="Seu login" required/>
+          <div id="reg_login_err" class="error-msg" style="display:none"></div>
         </div>
 
         <div class="form-group" style="margin-bottom:20px;">
           <label>Senha *</label>
-          <input type="password" th:field="*{password}" class="form-input" placeholder="Crie uma senha" required
-                 th:classappend="${#fields.hasErrors('password')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="error-msg"></div>
+          <input id="reg_password" type="password" class="form-input" placeholder="Crie uma senha" required/>
+          <div id="reg_password_err" class="error-msg" style="display:none"></div>
         </div>
 
         <div class="form-group" style="margin-bottom:20px;">
           <label>Nome completo *</label>
-          <input type="text" th:field="*{nomeCompleto}" class="form-input" placeholder="Nome completo" required
-                 th:classappend="${#fields.hasErrors('nomeCompleto')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('nomeCompleto')}" th:errors="*{nomeCompleto}" class="error-msg"></div>
+          <input id="reg_nomeCompleto" type="text" class="form-input" placeholder="Nome completo" required/>
+          <div id="reg_nomeCompleto_err" class="error-msg" style="display:none"></div>
         </div>
 
         <div class="form-group" style="margin-bottom:20px;">
           <label>Telefone *</label>
-          <input type="text" th:field="*{telefone}" class="form-input" placeholder="(11) 99999-9999" required
-                 th:classappend="${#fields.hasErrors('telefone')} ? ' input-error' : ''"/>
-          <div th:if="${#fields.hasErrors('telefone')}" th:errors="*{telefone}" class="error-msg"></div>
+          <input id="reg_telefone" type="text" class="form-input" placeholder="(11) 99999-9999" required/>
+          <div id="reg_telefone_err" class="error-msg" style="display:none"></div>
         </div>
 
         <button type="submit" class="btn">Cadastrar</button>
@@ -82,7 +75,7 @@
   </div>
 
   <footer style="text-align:center;padding:20px;background:var(--panel-2);position:fixed;bottom:0;width:100%;font-size:14px;color:var(--text-secondary);box-shadow:0 -2px 10px rgba(0,0,0,0.3);z-index:1000;">
-    <p style="margin:0;">FastDev © 2025 - Todos os direitos reservados</p>
+    <p style="margin:0;">CodeMy © 2025 - Todos os direitos reservados</p>
   </footer>
 
   <style>
@@ -142,6 +135,8 @@
     const tabRegister = document.getElementById('tab-register');
     const loginBox = document.getElementById('login');
     const registerBox = document.getElementById('register');
+    const globalSuccess = document.getElementById('globalSuccess');
+    const globalError = document.getElementById('globalError');
 
     tabLogin.addEventListener('click', () => {
       loginBox.style.display = 'block';
@@ -156,6 +151,86 @@
       tabRegister.style.borderBottom = '2px solid var(--brand)';
       tabLogin.style.borderBottom = '2px solid transparent';
     });
+
+    function showMsg(type, msg){
+      const el = type==='success'? globalSuccess : globalError;
+      const other = type==='success'? globalError : globalSuccess;
+      other.style.display='none';
+      other.textContent='';
+      el.textContent = msg || '';
+      el.style.display = msg? 'block':'none';
+    }
+
+    // Login via fetch
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      showMsg('error','');
+      const login = document.getElementById('login_login').value.trim();
+      const password = document.getElementById('login_password').value.trim();
+      if(!login || !password){ showMsg('error','Preencha login e senha'); return; }
+      try{
+        const res = await fetch('/api/v1/auth/login', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({login, password})
+        });
+        if(!res.ok){ showMsg('error','Usuário ou senha inválidos'); return; }
+        const data = await res.json();
+        if(data && data.token){
+          localStorage.setItem('fastdev_token', data.token);
+          location.href = '/web';
+        } else {
+          showMsg('error','Resposta de login inesperada');
+        }
+      }catch(err){ showMsg('error','Erro de rede ao autenticar'); }
+    });
+
+    // Cadastro via fetch
+    const registerForm = document.getElementById('registerForm');
+    registerForm.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      showMsg('success',''); showMsg('error','');
+      const payload = {
+        nome: document.getElementById('reg_nome').value.trim(),
+        login: document.getElementById('reg_login').value.trim(),
+        password: document.getElementById('reg_password').value.trim(),
+        nomeCompleto: document.getElementById('reg_nomeCompleto').value.trim(),
+        telefone: document.getElementById('reg_telefone').value.trim()
+      };
+      if(!payload.nome || !payload.login || !payload.password || !payload.nomeCompleto || !payload.telefone){
+        showMsg('error','Preencha todos os campos obrigatórios');
+        return;
+      }
+      try{
+        const res = await fetch('/api/v1/auth/register-visualizador', {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify(payload)
+        });
+        if(res.ok){
+          const msg = await res.text().catch(()=> 'Cadastro realizado!');
+          showMsg('success', (msg && msg.length < 200) ? msg : 'Cadastro realizado!');
+          tabLogin.click();
+        } else {
+          let msg = 'Falha ao cadastrar';
+          try {
+            const data = await res.clone().json();
+            msg = data?.detail || data?.title || data?.message || data?.error || msg;
+          } catch(_){
+            const text = await res.text().catch(()=> '');
+            if(text && text.trim().startsWith('{')){
+              try{
+                const data = JSON.parse(text);
+                msg = data?.detail || data?.title || data?.message || data?.error || msg;
+              }catch{}
+            } else if(text && text.trim().length > 0){
+              msg = text.trim().length > 200 ? msg : text.trim();
+            }
+          }
+          showMsg('error', msg);
+        }
+      }catch(err){ showMsg('error','Erro de rede ao cadastrar'); }
+    });
   </script>
 </body>
 </html>
+

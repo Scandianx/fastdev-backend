@@ -3,6 +3,7 @@ package br.com.scandianx.fastdev.dto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 
 public class RegisterDTO {
 
@@ -11,6 +12,7 @@ public class RegisterDTO {
     private String nome;
 
     @NotBlank(message = "login obrigatório")
+    @Email(message = "login deve ser um e-mail válido")
     @Size(max = 100, message = "login deve ter no máximo 100 caracteres")
     private String login;
 
@@ -26,7 +28,7 @@ public class RegisterDTO {
     @Pattern(regexp = "^[0-9()\\-\\s+]{10,20}$", message = "telefone inválido")
     private String telefone;
 
-    // Construtor padrão
+    // Construtor padrÃ£o
     public RegisterDTO() {}
 
     // Construtor completo (opcional)

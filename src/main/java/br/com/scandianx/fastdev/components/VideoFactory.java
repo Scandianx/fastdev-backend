@@ -21,6 +21,7 @@ public class VideoFactory {
             VideoYoutube v = new VideoYoutube();
             v.setUrlYouTube(dto.getUrl());
             v.setTitulo(dto.getTitulo());
+            v.setDescricao(dto.getDescricao());
             v.setNivelAcesso(dto.getNivelAcesso());
             return youtubeRepo.save(v);
         }

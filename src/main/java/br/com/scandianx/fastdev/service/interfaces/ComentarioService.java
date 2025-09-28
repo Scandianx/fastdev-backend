@@ -12,4 +12,5 @@ public interface ComentarioService {
     List<ComentarioDTO> listarComentariosPorVideo(Long videoId);
     void removerComentario(HttpServletRequest request, Long comentarioId);
     ComentarioDTO atualizarComentario(HttpServletRequest request, Long comentarioId, String novoTexto);
+    ComentarioDTO obterComentario(Long comentarioId);
 }

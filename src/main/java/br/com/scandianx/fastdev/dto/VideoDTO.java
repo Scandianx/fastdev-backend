@@ -9,15 +9,17 @@ public class VideoDTO {
     private Long id;
     private String titulo;
     private String url;
+    private String descricao;
     private LocalDateTime dtCriacao;
     private String nivelAcesso;
 
     public VideoDTO() {}
 
-    public VideoDTO(Long id, String titulo, String url, LocalDateTime dtCriacao, String nivelAcesso) {
+    public VideoDTO(Long id, String titulo, String url, String descricao, LocalDateTime dtCriacao, String nivelAcesso) {
         this.id = id;
         this.titulo = titulo;
         this.url = url;
+        this.descricao = descricao;
         this.dtCriacao = dtCriacao;
         this.nivelAcesso = nivelAcesso;
     }
@@ -33,6 +35,7 @@ public class VideoDTO {
     public String getUrl() {
         return url;
     }
+    public String getDescricao() { return descricao; }
 
     public LocalDateTime getDtCriacao() {
         return dtCriacao;
@@ -53,6 +56,7 @@ public class VideoDTO {
     public void setUrl(String url) {
         this.url = url;
     }
+    public void setDescricao(String descricao) { this.descricao = descricao; }
 
     public void setDtCriacao(LocalDateTime dtCriacao) {
         this.dtCriacao = dtCriacao;

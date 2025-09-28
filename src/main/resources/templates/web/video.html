@@ -1,708 +1,171 @@
+﻿
 <!DOCTYPE html>
 <html lang="pt" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{fragments/layout :: head('FastDev - Assistir Vídeo')}"></head>
-<body style="background:#0a0a0b;color:#E9EEF2;font-family:'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;margin:0;">
+<head th:replace="~{fragments/layout :: head('CodeMy - Assistir VÃ­deo')}"></head>
+<body style="background:var(--bg);color:var(--text);margin:0;">
 
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
-    
-    :root{
-      --bg:#0b0f14;
-      --panel:#0f141b;
-      --panel-2:#121924;
-      --panel-3:#16202d;
-      --line:#1b2533;
-      --line-light:#233044;
-      --muted:#7C8EA3;
-      --text:#E6F1FF;
-      --text-secondary:#A8B3C7;
-      --brand:#00C2FF;
-      --brand-hover:#00A4E4;
-      --brand-glow:rgba(0, 194, 255, 0.35);
-      --success:#00FFA3;
-      --blue:#33C3FF;
-    }
-    
-    *{box-sizing:border-box}
-    
-    body {
-      background: var(--bg);
-      background-image: 
-        radial-gradient(ellipse at top left, rgba(0, 194, 255, 0.20) 0%, transparent 55%),
-        radial-gradient(ellipse at bottom right, rgba(57, 255, 20, 0.10) 0%, transparent 55%);
-      min-height: 100vh;
-    }
-    
-    ::-webkit-scrollbar { width: 10px; height: 10px; }
-    ::-webkit-scrollbar-track { background: var(--panel); }
-    ::-webkit-scrollbar-thumb { 
-      background: var(--line-light); 
-      border-radius: 5px;
-      border: 2px solid var(--panel);
-    }
-    ::-webkit-scrollbar-thumb:hover { background: #3a3a3f; }
-    
-    .container{
-      max-width:1280px;
-      margin:32px auto;
-      padding:0 24px;
-      display:grid;
-      gap:32px;
-      grid-template-columns:1fr;
-    }
-    @media (min-width:1024px){
-      .container{grid-template-columns:1fr 380px}
-    }
-
-    header.sticky{
-      position:sticky;
-      top:0;
-      z-index:100;
-      background: rgba(10, 10, 11, 0.8);
-      backdrop-filter: saturate(180%) blur(20px);
-      -webkit-backdrop-filter: saturate(180%) blur(20px);
-      padding:16px 24px;
-      border-bottom:1px solid var(--line);
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      transition: all 0.3s ease;
-    }
-    
-    .brand{
-      font-weight:900;
-      font-size:24px;
-      letter-spacing:-0.5px;
-      background: linear-gradient(135deg, #ffffff 0%, #A8B3C7 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .brand span {
-      background: linear-gradient(135deg, var(--brand) 0%, #66E0FF 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    /* Botões modernos */
-    .btn{
-      background: linear-gradient(135deg, var(--brand) 0%, var(--brand-hover) 100%);
-      color:#fff;
-      border:none;
-      padding:10px 18px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:600;
-      font-size:14px;
-      transition:all 0.2s ease;
-      display:inline-flex;
-      gap:8px;
-      align-items:center;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .btn::before {
-      content: '';
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      width: 0;
-      height: 0;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.3);
-      transform: translate(-50%, -50%);
-      transition: width 0.6s, height 0.6s;
-    }
-    
-    .btn:hover {
-      transform:translateY(-2px);
-      box-shadow: 0 8px 20px var(--brand-glow);
-    }
-    
-    .btn:hover::before {
-      width: 300px;
-      height: 300px;
-    }
-    
-    .btn:active{
-      transform:translateY(0);
-    }
-    
-    .btn.ghost{
-      background: rgba(255, 255, 255, 0.05);
-      color:var(--text);
-      border:1px solid rgba(255, 255, 255, 0.1);
-      backdrop-filter: blur(10px);
-    }
-    
-    .btn.ghost:hover {
-      background: rgba(255, 255, 255, 0.08);
-      border-color: rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    }
-    
-    .btn.fav.active{
-      background: linear-gradient(135deg, #ec4899 0%, #ef4444 100%);
-      animation: pulse 2s infinite;
-    }
-    
-    @keyframes pulse {
-      0%, 100% { box-shadow: 0 0 20px rgba(239, 68, 68, 0.5); }
-      50% { box-shadow: 0 0 30px rgba(239, 68, 68, 0.8); }
-    }
-    
-    .chip{
-      display:inline-block;
-      background: linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 100%);
-      border:1px solid rgba(255,255,255,0.08);
-      color:#a1a1aa;
-      padding:6px 14px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:500;
-      backdrop-filter: blur(10px);
-    }
-
-    .video-wrap{
-      position:relative;
-      padding-top:56.25%;
-      border-radius:20px;
-      overflow:hidden;
-      background: linear-gradient(135deg, #0f0f11 0%, #1a1a1e 100%);
-      box-shadow: 
-        0 20px 40px rgba(0,0,0,0.6),
-        0 0 80px rgba(239, 68, 68, 0.1),
-        inset 0 0 0 1px rgba(255,255,255,0.05);
-      transition: all 0.3s ease;
-    }
-    
-    .video-wrap:hover {
-      box-shadow: 
-        0 25px 50px rgba(0,0,0,0.7),
-        0 0 100px rgba(239, 68, 68, 0.15),
-        inset 0 0 0 1px rgba(255,255,255,0.08);
-    }
-    
-    .video-wrap iframe{
-      position:absolute;
-      inset:0;
-      width:100%;
-      height:100%;
-      border:0;
-    }
-
-    /* Títulos e descrição */
-    .title{
-      font-size:32px;
-      font-weight:800;
-      margin:24px 0 12px;
-      line-height:1.2;
-      background: linear-gradient(135deg, #fff 0%, #d4d4d8 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-    
-    .desc{
-      color:var(--text-secondary);
-      margin:0 0 24px 0;
-      font-size:16px;
-      line-height:1.6;
-    }
-    
-    .actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-bottom:32px;
-      align-items:center;
-    }
-
-    /* Painéis glassmorphism */
-    .panel{
-      background: rgba(15, 15, 17, 0.6);
-      border:1px solid rgba(255,255,255,0.06);
-      border-radius:20px;
-      padding:24px;
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-    }
-    
-    .panel.elev{
-      box-shadow: 
-        0 20px 40px rgba(0,0,0,0.4),
-        inset 0 1px 0 rgba(255,255,255,0.05);
-    }
-
-    /* Seção de comentários aprimorada */
-    .comments h2{
-      margin:0 0 20px 0;
-      font-size:20px;
-      font-weight:700;
-      color:var(--text);
-    }
-    
-    .c-list{
-      list-style:none;
-      margin:0;
-      padding:0;
-      display:flex;
-      flex-direction:column;
-      gap:16px;
-    }
-    
-    .comment{
-      display:flex;
-      gap:12px;
-      animation: fadeInUp 0.5s ease;
-    }
-    
-    @keyframes fadeInUp {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    .avatar{
-      flex:0 0 42px;
-      height:42px;
-      border-radius:50%;
-      background: linear-gradient(135deg, var(--brand) 0%, #66E0FF 100%);
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      font-weight:700;
-      font-size:18px;
-      color:#fff;
-      box-shadow: 0 4px 12px rgba(0, 194, 255, 0.3);
-    }
-    
-    .bubble{
-      background: rgba(20, 20, 23, 0.6);
-      border:1px solid rgba(255,255,255,0.05);
-      border-radius:16px;
-      padding:14px 16px;
-      flex:1;
-      backdrop-filter: blur(10px);
-      transition: all 0.2s ease;
-    }
-    
-    .bubble:hover {
-      background: rgba(26, 26, 30, 0.8);
-      border-color: rgba(255,255,255,0.08);
-    }
-    
-    .meta{
-      font-size:13px;
-      color:var(--text-secondary);
-      margin-bottom:8px;
-    }
-    
-    .meta strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-    
-    .text{
-      white-space:pre-wrap;
-      word-break:break-word;
-      line-height:1.5;
-      color: var(--text);
-    }
-    .c-list{
-  list-style:none;
-  margin:0 0 24px 0;
-  padding:0;
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-    .text a {
-      color: var(--blue);
-      text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s ease;
-    }
-    
-    .text a:hover {
-      border-bottom-color: var(--blue);
-    }
-
-    /* Formulário de comentário */
-    .form-row{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      justify-content:flex-end;
-      margin-top:12px;
-    }
-    
-    .input, textarea.input{
-      width:100%;
-      padding:14px 16px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,0.08);
-      background: rgba(20, 20, 23, 0.6);
-      color:var(--text);
-      outline:none;
-      font-family: inherit;
-      font-size:14px;
-      resize: vertical;
-      transition: all 0.2s ease;
-    }
-    
-    .input:focus{
-      border-color: var(--brand);
-      background: rgba(20, 28, 36, 0.9);
-      box-shadow: 0 0 0 3px var(--brand-glow);
-    }
-    
-    .input::placeholder {
-      color: var(--muted);
-    }
-    
-    .char{
-      font-size:12px;
-      color:var(--muted);
-      margin-right:auto;
-      font-weight:500;
-    }
-
-    .toast{
-      position:fixed;
-      left:50%;
-      bottom:32px;
-      transform:translateX(-50%) translateY(20px);
-      background: linear-gradient(135deg, rgba(0, 255, 163, 0.9) 0%, rgba(0, 208, 132, 0.9) 100%);
-      color:#fff;
-      padding:12px 20px;
-      border-radius:12px;
-      font-weight:600;
-      font-size:14px;
-      opacity:0;
-      transition:all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-      backdrop-filter: blur(10px);
-      box-shadow: 0 10px 30px rgba(0, 255, 163, 0.4);
-      z-index:9999;
-    }
-    
-    .toast.show{
-      opacity:1;
-      transform:translateX(-50%) translateY(0);
-    }
-
-    .side{
-      display:flex;
-      flex-direction:column;
-      gap:20px;
-    }
-    
-    .side h3{
-      margin:0 0 16px 0;
-      font-size:18px;
-      font-weight:700;
-      color:var(--text);
-    }
-    
-    .mini{
-      display:flex;
-      gap:12px;
-      align-items:center;
-      padding:12px;
-      border-radius:12px;
-      transition: all 0.2s ease;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    
-    .mini::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, transparent 0%, rgba(0, 194, 255, 0.12) 100%);
-      opacity: 0;
-      transition: opacity 0.3s ease;
-    }
-    
-    .mini:hover {
-      background: rgba(255,255,255,0.03);
-      transform: translateX(4px);
-    }
-    
-    .mini:hover::before {
-      opacity: 1;
-    }
-    
-    .mini-thumb{
-      width:100px;
-      height:60px;
-      background: linear-gradient(135deg, var(--panel-2) 0%, var(--panel-3) 100%);
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,0.05);
-      overflow:hidden;
-      flex-shrink: 0;
-      position: relative;
-    }
-    
-    .mini-thumb::after {
-      content: '▶';
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: rgba(0,0,0,0.3);
-      color: white;
-      font-size: 20px;
-      opacity: 0;
-      transition: opacity 0.2s ease;
-    }
-    
-    .mini:hover .mini-thumb::after {
-      opacity: 1;
-    }
-    
-    .mini-title{
-      font-size:14px;
-      line-height:1.4;
-      font-weight:500;
-      color: var(--text);
-    }
-
-    /* Animações de entrada */
-    @keyframes slideInFromTop {
-      from {
-        opacity: 0;
-        transform: translateY(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-    
-    @keyframes slideInFromLeft {
-      from {
-        opacity: 0;
-        transform: translateX(-20px);
-      }
-      to {
-        opacity: 1;
-        transform: translateX(0);
-      }
-    }
-    
-    .video-wrap {
-      animation: slideInFromTop 0.6s ease;
-    }
-    
-    .title, .desc, .actions {
-      animation: slideInFromLeft 0.8s ease;
-    }
-    
-    .panel {
-      animation: fadeInUp 1s ease;
-    }
-
-    @media (max-width: 768px) {
-      .container {
-        padding: 0 16px;
-        gap: 24px;
-      }
-      
-      .title {
-        font-size: 24px;
-      }
-      
-      header.sticky {
-        padding: 12px 16px;
-      }
-      
-      .brand {
-        font-size: 20px;
-      }
-      
-      .btn {
-        padding: 8px 14px;
-        font-size: 13px;
-      }
-    }
-  </style>
-
-  <header class="sticky">
-    <div class="brand">FAST<span>DEV</span></div>
+  <header class="sticky" style="position:sticky;top:0;z-index:100;background:rgba(10,10,11,0.8);backdrop-filter:blur(16px);padding:16px 24px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;">
+    <div class="brand" style="font-weight:900;font-size:24px;letter-spacing:-0.5px;">CODE<span style="background: linear-gradient(135deg, var(--brand) 0%, #C4B5FD 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">MY</span></div>
     <div style="display:flex;gap:12px;align-items:center">
-      <a href="/web" class="btn ghost">← Voltar</a>
-      <a href="/auth-web" class="btn ghost" onclick="localStorage.removeItem('fastdev_token')">Sair</a>
+      <a href="/web" class="btn ghost" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--text)">âŸµ Voltar</a>
+      <a href="/auth-web" class="btn ghost" onclick="localStorage.removeItem('CodeMy_token')" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);padding:10px 14px;border-radius:10px;text-decoration:none;color:var(--text)">Sair</a>
     </div>
   </header>
 
-  <main class="container">
-    <!-- Conteúdo principal -->
+  <main class="container" style="max-width:1280px;margin:24px auto;padding:0 24px;display:grid;gap:24px;grid-template-columns:1fr;">
     <section>
-      <div class="video-wrap">
-        <iframe
-          src="https://www.youtube.com/embed/UA-Go6G5LNQ"
-          title="FASTDEV - Vídeo Demo"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-          allowfullscreen></iframe>
+      <div class="video-wrap" style="position:relative;padding-top:56.25%;border-radius:16px;overflow:hidden;background:linear-gradient(135deg,#0f0f11 0%, #1a1a1e 100%);border:1px solid rgba(255,255,255,0.06)">
+        <iframe id="player" src="" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen style="position:absolute;inset:0;width:100%;height:100%;border:0"></iframe>
       </div>
 
-      <div class="title">Como construir projetos que agregam no currículo</div>
-      <div class="desc">Já se perguntou como conseguir a primeira vaga se todas pedem experiência… e você ainda não tem? A saída é criar a sua própria experiência. Neste módulo, você vai construir projetos práticos e relevantes que contam de verdade no currículo — e que te dão assunto sólido pra entrevista.</div>
+      <h1 id="titulo" class="title" style="font-size:28px;font-weight:800;margin:20px 0 8px"></h1>
+      <p id="descricao" class="desc" style="color:var(--text-secondary);margin:0 0 16px 0"></p>
 
-      <div class="actions">
-        <button id="favBtn" class="btn fav"><span>Favoritar</span> ❤️</button>
-        <button id="copyBtn" class="btn ghost">📋 Copiar link</button>
-        <span class="chip">Nível • Básico</span>
-        <span class="chip">Stack • Java & Spring</span>
+      <div class="actions" style="display:flex;gap:12px;align-items:center;margin-bottom:24px;flex-wrap:wrap;">
+        <button id="favBtn" class="btn fav" style="background:linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);color:#fff;border:none;padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px">Favoritar</button>
+        <button id="copyBtn" class="btn ghost" style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);color:var(--text);padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px">Copiar link</button>
+        <span id="chipNivel" class="chip" style="display:inline-block;background:linear-gradient(135deg, rgba(255,255,255,0.03) 0%, rgba(255,255,255,0.06) 100%);border:1px solid rgba(255,255,255,0.08);color:#a1a1aa;padding:6px 14px;border-radius:999px;font-size:12px;font-weight:500"></span>
       </div>
 
-      <!-- Comentários -->
-      <section class="panel elev comments">
-        <h2>💬 Comentários</h2>
-
-        <ul id="commentsList" class="c-list"></ul>
-
-        <form id="commentForm" autocomplete="off">
-          <textarea id="commentText" class="input" rows="3" maxlength="500"
-                    placeholder="Escreva um comentário... (Ctrl/Cmd + Enter para enviar)"></textarea>
-          <div class="form-row">
-            <span id="charCount" class="char">0/500</span>
-            <button type="submit" class="btn">Enviar comentário</button>
+      <section class="panel elev comments" style="background:rgba(15,15,17,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:16px;padding:16px;">
+        <h2 style="margin:0 0 16px 0;font-size:18px;font-weight:700">ComentÃ¡rios</h2>
+        <ul id="commentsList" class="c-list" style="list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px"></ul>
+        <form id="commentForm" autocomplete="off" style="margin-top:12px">
+          <textarea id="commentText" class="input" rows="3" maxlength="500" placeholder="Escreva um comentÃ¡rio..." style="width:100%;padding:12px 14px;border-radius:10px;border:1px solid rgba(255,255,255,0.08);background:rgba(20,20,23,0.6);color:var(--text);"></textarea>
+          <div class="form-row" style="display:flex;gap:12px;align-items:center;justify-content:flex-end;margin-top:8px">
+            <span id="charCount" class="char" style="font-size:12px;color:var(--muted);margin-right:auto;font-weight:500">0/500</span>
+            <button type="submit" class="btn" style="background:linear-gradient(135deg, #8B5CF6 0%, #7C3AED 100%);color:#fff;border:none;padding:10px 18px;border-radius:12px;cursor:pointer;font-weight:600;font-size:14px">Enviar comentÃ¡rio</button>
           </div>
         </form>
       </section>
     </section>
 
-    <!-- Lateral -->
-    <aside class="side">
-      <div class="panel elev">
-        <h3>🎯 Próximos vídeos</h3>
-        <div class="mini">
-          <div class="mini-thumb">
-            <img th:src="@{/images/thumb-placeholder.png}" alt="" style="width:100%;height:100%;object-fit:cover;">
-          </div>
-          <div class="mini-title">Estruturando seu portfólio para entrevistas</div>
-        </div>
-        <div class="mini">
-          <div class="mini-thumb">
-            <img th:src="@{/images/thumb-placeholder.png}" alt="" style="width:100%;height:100%;object-fit:cover;">
-          </div>
-          <div class="mini-title">Projeto Spring Boot do zero ao deploy</div>
-        </div>
-        <div class="mini">
-          <div class="mini-thumb">
-            <img th:src="@{/images/thumb-placeholder.png}" alt="" style="width:100%;height:100%;object-fit:cover;">
-          </div>
-          <div class="mini-title">Como vender seu código em 5 minutos</div>
-        </div>
-      </div>
-    </aside>
+    <aside class="side" style="display:flex;flex-direction:column;gap:16px"></aside>
   </main>
 
   <footer th:replace="~{fragments/layout :: footer}"></footer>
 
   <script>
-    // ===== Config mock por pág. =====
-    const COMMENTS_KEY = 'fastdev_comments_demo_v1';
-    const FAV_KEY = 'fastdev_fav_demo_v1';
-
-    // ===== Util =====
     const $ = sel => document.querySelector(sel);
-    function escapeHtml(str){return str.replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
-    function linkify(str){return str.replace(/(https?:\/\/\S+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')}
-    function timeAgo(ts){
-      const s=Math.floor((Date.now()-ts)/1000);
-      if(s<60) return 'agora';
-      const m=Math.floor(s/60); if(m<60) return m+' min';
-      const h=Math.floor(m/60); if(h<24) return h+' h';
-      const d=Math.floor(h/24); return d+' d';
-    }
-    function toast(msg){
-      const el=document.createElement('div'); el.className='toast'; el.textContent=msg;
-      document.body.appendChild(el);
-      setTimeout(()=>el.classList.add('show'),10);
-      setTimeout(()=>{el.classList.remove('show'); setTimeout(()=>el.remove(),200)},2000);
-    }
+    function escapeHtml(str){return (str||'').replace(/[&<>"']/g, s=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[s]))}
+    function linkify(str){return (str||'').replace(/(https?:\/\/\S+)/g,'<a href="$1" target="_blank" rel="noopener">$1</a>')}
+    function timeAgoFromIso(iso){const ts=Date.parse(iso);if(!ts)return'';const s=Math.floor((Date.now()-ts)/1000);if(s<60)return'agora';const m=Math.floor(s/60);if(m<60)return m+' min';const h=Math.floor(m/60);if(h<24)return h+' h';const d=Math.floor(h/24);return d+' d'}
+    function toast(msg){const el=document.createElement('div'); el.style.cssText='position:fixed;left:50%;bottom:32px;transform:translateX(-50%);background:linear-gradient(135deg, #22D3A8 0%, #0ea5e9 100%);color:#fff;padding:10px 16px;border-radius:12px;font-weight:600;box-shadow:0 10px 30px rgba(34,211,168,0.4);z-index:9999;'; el.textContent=msg; document.body.appendChild(el); setTimeout(()=>{el.remove()},2000);}
 
-    // ===== Comentários (localStorage mock) =====
-    let comments = [];
-    try{
-      const raw = localStorage.getItem(COMMENTS_KEY);
-      comments = raw ? JSON.parse(raw) : null;
-    }catch{comments=null}
-    if(!Array.isArray(comments)){
-      comments = [
-        {author:'João', text:'Muito bom esse conteúdo!', ts: Date.now()-86400000},
-        {author:'Ana', text:'Ajudou demais no meu projeto 🚀', ts: Date.now()-3600000}
-      ];
-      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-    }
-
+    const params=new URLSearchParams(location.search);
+    const videoId=params.get('id');
+    const token=localStorage.getItem('CodeMy_token');
     const listEl = $('#commentsList');
-    function renderComments(){
-      listEl.innerHTML = comments.map(c => `
-        <li class="comment">
-          <div class="avatar">${(c.author||'Você').trim().charAt(0).toUpperCase()}</div>
-          <div class="bubble">
-            <div class="meta"><strong>${escapeHtml(c.author||'Você')}</strong> · <span>${timeAgo(c.ts)}</span></div>
-            <div class="text">${linkify(escapeHtml(c.text))}</div>
-          </div>
-        </li>
-      `).join('');
-    }
-    renderComments();
-
     const form = $('#commentForm');
     const textInput = $('#commentText');
     const charCount = $('#charCount');
+    const favBtn = $('#favBtn');
+    const tituloEl = $('#titulo');
+    const descEl = $('#descricao');
+    const chipNivel = $('#chipNivel');
+    const player = $('#player');
+
+    function toEmbed(url){
+      if(!url) return '';
+      try{
+        const u = new URL(url);
+        if(u.hostname.includes('youtube.com')){
+          const vid = u.searchParams.get('v');
+          return vid ? `https://www.youtube.com/embed/${vid}` : '';
+        }
+        if(u.hostname.includes('youtu.be')){
+          const seg = u.pathname.replace('/','');
+          return seg ? `https://www.youtube.com/embed/${seg}` : '';
+        }
+        return url;
+      }catch{ return url; }
+    }
+
+    async function loadVideo(){
+      if(!videoId){ return; }
+      const res = await fetch(`/api/v1/videos/${videoId}`);
+      if(!res.ok){ tituloEl.textContent = 'VÃ­deo nÃ£o encontrado'; return; }
+      const v = await res.json();
+      tituloEl.textContent = v.titulo || 'Sem tÃ­tulo';
+      chipNivel.textContent = v.nivelAcesso || '';
+      player.src = toEmbed(v.url || '');
+      // Exibe descriÃ§Ã£o do vÃ­deo
+      descEl.textContent = v.descricao || '';
+      return v;
+    }
 
     charCount.textContent = '0/500';
     textInput.addEventListener('input', ()=> charCount.textContent = `${textInput.value.length}/500`);
     textInput.addEventListener('keydown', (e)=>{ if((e.ctrlKey||e.metaKey)&&e.key==='Enter'){ form.requestSubmit(); }});
 
-    form.addEventListener('submit', e=>{
+    async function loadComments(){
+      if(!videoId){ listEl.innerHTML=''; return; }
+      try{
+        const res = await fetch(`/api/v1/videos/${videoId}/comentarios`);
+        if(!res.ok){ listEl.innerHTML=''; return; }
+        const data = await res.json();
+        listEl.innerHTML = data.map(c=>`
+          <li style="display:flex;gap:10px">
+            <div style="flex:0 0 42px;height:42px;border-radius:50%;background:linear-gradient(135deg, var(--brand) 0%, #C4B5FD 100%);display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff">${escapeHtml((c.nomeUsuario||'V').charAt(0).toUpperCase())}</div>
+            <div style="flex:1;background:rgba(20,20,23,0.6);border:1px solid rgba(255,255,255,0.06);border-radius:12px;padding:12px 14px">
+              <div style="font-size:13px;color:var(--text-secondary);margin-bottom:6px"><strong style="color:var(--text)">${escapeHtml(c.nomeUsuario||'')}</strong> Â· <span>${timeAgoFromIso(c.criadoEm)}</span></div>
+              <div style="color:var(--text)">${linkify(escapeHtml(c.texto||''))}</div>
+            </div>
+          </li>
+        `).join('');
+      }catch{ listEl.innerHTML=''; }
+    }
+
+    form.addEventListener('submit', async e=>{
       e.preventDefault();
       const txt = textInput.value.trim();
       if(!txt){ toast('Escreva algo antes de enviar'); return; }
-      const author = 'Você'; // fixo
-      comments.unshift({author,text:txt,ts:Date.now()});
-      localStorage.setItem(COMMENTS_KEY, JSON.stringify(comments));
-      textInput.value=''; charCount.textContent='0/500';
-      renderComments();
-      toast('Comentário publicado!');
+      if(!token){ toast('FaÃ§a login para comentar'); return; }
+      if(!videoId){ toast('VÃ­deo invÃ¡lido'); return; }
+      try{
+        const res = await fetch(`/api/v1/videos/${videoId}/comentarios`, {
+          method:'POST',
+          headers:{'Content-Type':'application/json','Authorization':`Bearer ${token}`},
+          body: JSON.stringify({texto: txt})
+        });
+        if(!res.ok){ const err=await res.json().catch(()=>({})); toast(err.detail||'Falha ao publicar'); return; }
+        textInput.value=''; charCount.textContent='0/500';
+        await loadComments();
+        toast('ComentÃ¡rio publicado!');
+      }catch{ toast('Erro de rede'); }
     });
 
-    // ===== Favoritar (localStorage mock) =====
-    const favBtn = $('#favBtn');
-    let fav = localStorage.getItem(FAV_KEY) === '1';
-    function syncFavUI(){
-      favBtn.classList.toggle('active', fav);
-      favBtn.querySelector('span').textContent = fav ? 'Favoritado' : 'Favoritar';
+    async function getFavState(){
+      if(!token || !videoId) return false;
+      try{
+        const res=await fetch('/api/v1/favoritos',{headers:{'Authorization':`Bearer ${token}`}});
+        if(!res.ok) return false;
+        const favs=await res.json();
+        const currTitle = tituloEl.textContent?.trim() || '';
+        return Array.isArray(favs) && favs.some(f=> (f.tituloVideo||'').trim()===currTitle);
+      }catch{return false}
     }
-    syncFavUI();
-    favBtn.addEventListener('click', ()=>{
-      fav = !fav;
-      localStorage.setItem(FAV_KEY, fav ? '1' : '0');
-      syncFavUI();
-      toast(fav ? 'Adicionado aos favoritos' : 'Removido dos favoritos');
+    function syncFavUI(state){ favBtn.classList.toggle('active', state); favBtn.textContent = state ? 'Favoritado' : 'Favoritar'; }
+
+    favBtn.addEventListener('click', async ()=>{
+      if(!token){ toast('FaÃ§a login para favoritar'); return; }
+      if(!videoId){ toast('VÃ­deo invÃ¡lido'); return; }
+      const atual = favBtn.classList.contains('active');
+      try{
+        const res = await fetch(`/api/v1/favoritos/${videoId}`, { method: atual? 'DELETE':'POST', headers:{ 'Authorization':`Bearer ${token}`}});
+        if(!res.ok){ const err=await res.json().catch(()=>({})); toast(err.detail||'Falha ao atualizar favorito'); return; }
+        syncFavUI(!atual);
+        toast(!atual? 'Adicionado aos favoritos':'Removido dos favoritos');
+      }catch{ toast('Erro de rede'); }
     });
 
-    // ===== Copiar link =====
     $('#copyBtn').addEventListener('click', async ()=>{
       try{ await navigator.clipboard.writeText(location.href); toast('Link copiado!'); }
-      catch{ toast('Não foi possível copiar'); }
+      catch{ toast('NÃ£o foi possÃ­vel copiar'); }
     });
+
+    (async ()=>{ await loadVideo(); syncFavUI(await getFavState()); await loadComments(); })();
   </script>
 </body>
 </html>
+
