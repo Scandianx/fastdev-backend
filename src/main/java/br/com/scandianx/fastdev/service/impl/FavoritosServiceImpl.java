@@ -43,7 +43,7 @@ public class FavoritosServiceImpl implements FavoritosService {
         Favorito favorito = new Favorito(usuario, videoOpt.get());
         return converter.toDTO(favoritoRepository.save(favorito));
     }
-    
+
     @Override
     public List<FavoritoDTO> listarPorUsuario(HttpServletRequest request) {
         String token = request.getHeader("Authorization");

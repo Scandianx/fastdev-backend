@@ -16,9 +16,6 @@ import br.com.scandianx.fastdev.repository.interfaces.VideoRepository;
 import br.com.scandianx.fastdev.service.interfaces.AuthorizationService;
 import br.com.scandianx.fastdev.service.interfaces.ComentarioService;
 import jakarta.servlet.http.HttpServletRequest;
-import br.com.scandianx.fastdev.exception.NaoAutorizadoException;
-import br.com.scandianx.fastdev.exception.PermissaoNegadaException;
-import br.com.scandianx.fastdev.exception.RecursoNaoEncontradoException;
 
 @Service
 public class ComentarioServiceImpl implements ComentarioService {
@@ -39,12 +36,9 @@ public class ComentarioServiceImpl implements ComentarioService {
     public ComentarioDTO adicionarComentario(HttpServletRequest request, Long videoId, String texto) {
         String token = request.getHeader("Authorization");
         Usuario usuario = authorizationService.findUserByToken(token);
-        if (usuario == null) {
-            throw new NaoAutorizadoException("Usuário não autenticado");
-        }
         Optional<VideoAbstrato> videoOpt = videoRepository.findById(videoId);
-        if (videoOpt.isEmpty()) {
-            throw new RecursoNaoEncontradoException("Vídeo não encontrado");
+        if (usuario == null || videoOpt.isEmpty()) {
+            return null;
         }
         Comentario comentario = new Comentario();
         comentario.setTexto(texto);
@@ -56,7 +50,7 @@ public class ComentarioServiceImpl implements ComentarioService {
 
     @Override
     public List<ComentarioDTO> listarComentariosPorVideo(Long videoId) {
-        List<Comentario> comentarios = comentarioRepository.findByVideoIdOrderByCriadoEmDesc(videoId);
+        List<Comentario> comentarios = comentarioRepository.findByVideoId(videoId);
         return converter.toDTOListComentarios(comentarios);
     }
 
@@ -64,48 +58,15 @@ public class ComentarioServiceImpl implements ComentarioService {
     public void removerComentario(HttpServletRequest request, Long comentarioId) {
         String token = request.getHeader("Authorization");
         Usuario usuario = authorizationService.findUserByToken(token);
-        if (usuario == null) {
-            throw new NaoAutorizadoException("Usuário não autenticado");
-        }
         Optional<Comentario> comentario = comentarioRepository.findById(comentarioId);
         if (comentario.isEmpty()){
-            throw new RecursoNaoEncontradoException("Comentário não encontrado");
+            return;
         }
-        if (!comentario.get().getUsuario().getId().equals(usuario.getId())) {
-            throw new PermissaoNegadaException("Você não pode remover este comentário");
+        if (comentario.get().getUsuario().getId()!= usuario.getId()) {
+            return;
         }
-        comentarioRepository.delete(comentario.get());
-    }
-
-    @Override
-    public ComentarioDTO atualizarComentario(HttpServletRequest request, Long comentarioId, String novoTexto) {
-        String token = request.getHeader("Authorization");
-        Usuario usuario = authorizationService.findUserByToken(token);
-        if (usuario == null) {
-            throw new NaoAutorizadoException("Usuário não autenticado");
+        if (usuario != null) {
+            comentarioRepository.delete(comentario.get());
         }
-
-        Optional<Comentario> comentarioOpt = comentarioRepository.findById(comentarioId);
-        if (comentarioOpt.isEmpty()) {
-            throw new RecursoNaoEncontradoException("Comentário não encontrado");
-        }
-
-        Comentario comentario = comentarioOpt.get();
-        if (!comentario.getUsuario().getId().equals(usuario.getId())) {
-            throw new PermissaoNegadaException("Você não pode editar este comentário");
-        }
-
-        comentario.setTexto(novoTexto);
-        Comentario salvo = comentarioRepository.save(comentario);
-        return converter.toDTO(salvo);
-    }
-
-    @Override
-    public ComentarioDTO obterComentario(Long comentarioId) {
-        Optional<Comentario> comentarioOpt = comentarioRepository.findById(comentarioId);
-        if (comentarioOpt.isEmpty()) {
-            throw new RecursoNaoEncontradoException("Comentário não encontrado");
-        }
-        return converter.toDTO(comentarioOpt.get());
     }
 }

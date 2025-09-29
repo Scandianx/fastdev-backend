@@ -8,7 +8,6 @@ import br.com.scandianx.fastdev.entity.Comentario;
 public interface ComentarioRepository {
     Comentario save(Comentario comentario);
     List<Comentario> findByVideoId(Long videoId);
-    List<Comentario> findByVideoIdOrderByCriadoEmDesc(Long videoId);
     Optional<Comentario> findById(Long id);
     void delete(Comentario comentario);
 }

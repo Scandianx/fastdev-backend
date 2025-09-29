@@ -1,4 +1,4 @@
-package br.com.scandianx.fastdev.controller3;
+package br.com.scandianx.fastdev.controller;
 
 import br.com.scandianx.fastdev.components.Converter;
 
