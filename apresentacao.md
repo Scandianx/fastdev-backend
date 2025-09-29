@@ -9,7 +9,7 @@ Aqui está a versão melhorada:
 ## 1. Introdução
 
 FastDev é uma plataforma de streaming educacional desenvolvida com Java Spring Boot no backend e ReactJS no frontend.  
-Nosso foco desde a modelagem foi garantir **escalabilidade**, **organização** e **extensão futura** através da aplicação rigorosa dos padrões **MVC**, **SOLID** e **Repository Pattern**, além da arquitetura pensada para futura migração para **bancos NoSQL**, compatíveis com o alto volume de dados característico de plataformas de mídia.
+Nosso foco desde a modelagem foi garantir **escalabilidade**, **organização** e **extensão futura** através da aplicação rigorosa dos padrões **MVC**, **SOLID** e **Repository Pattern**, além da arquitetura pensada para futura migração para **bancos NoSQL**, compatíveis com o alto volume de dados característico de plataformas de mídia..
 
 ---
 
