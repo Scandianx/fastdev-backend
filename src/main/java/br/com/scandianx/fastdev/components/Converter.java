@@ -60,6 +60,7 @@ public class Converter {
                 video.getId(),
                 video.getTitulo(),
                 video.getUrl(),
+                video.getDescricao(),
                 video.getDtCriacao(),
                 video.getNivelAcesso().name());
     }

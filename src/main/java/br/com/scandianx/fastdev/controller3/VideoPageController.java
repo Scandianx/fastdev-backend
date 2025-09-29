@@ -1,4 +1,4 @@
-package br.com.scandianx.fastdev.controller;
+package br.com.scandianx.fastdev.controller3;
 
 import java.util.List;
 import java.util.Map;

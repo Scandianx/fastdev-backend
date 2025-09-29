@@ -85,19 +85,19 @@ public abstract class Usuario implements UserDetails {
         if (this.role == UsuarioRole.ADMIN) {
             return List.of(
                 new SimpleGrantedAuthority("ROLE_ADMIN"),
-                new SimpleGrantedAuthority("ROLE_GRINGADEV"),
-                new SimpleGrantedAuthority("ROLE_BRDEV"),
+                new SimpleGrantedAuthority("ROLE_USDEV"),
+                new SimpleGrantedAuthority("ROLE_BRLDEV"),
                 new SimpleGrantedAuthority("ROLE_USER")
             );
-        } else if (this.role == UsuarioRole.GRINGADEV) {
+        } else if (this.role == UsuarioRole.USDEV) {
             return List.of(
-                new SimpleGrantedAuthority("ROLE_GRINGADEV"),
-                new SimpleGrantedAuthority("ROLE_BRDEV"),
+                new SimpleGrantedAuthority("ROLE_USDEV"),
+                new SimpleGrantedAuthority("ROLE_BRLDEV"),
                 new SimpleGrantedAuthority("ROLE_USER")
             );
-        } else if (this.role == UsuarioRole.BRDEV) {
+        } else if (this.role == UsuarioRole.BRLDEV) {
             return List.of(
-                new SimpleGrantedAuthority("ROLE_BRDEV"),
+                new SimpleGrantedAuthority("ROLE_BRLDEV"),
                 new SimpleGrantedAuthority("ROLE_USER")
             );
         } else {

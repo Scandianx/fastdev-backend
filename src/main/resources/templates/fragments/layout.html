@@ -3,12 +3,153 @@
 <head th:fragment="head(title)">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title th:text="${title}">FastDev</title>
+  <title th:text="${title}">CodeMy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    /* Tipografia */
+    @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Roboto:wght@400;500;700&display=swap');
+
+    /* Paleta e tokens de design */
+    :root{
+      --bg:#0b0a10;
+      --bg-grad1: rgba(139, 92, 246, 0.12);
+      --bg-grad2: rgba(236, 72, 153, 0.06);
+      --panel:#100f17;
+      --panel-2:#141325;
+      --panel-3:#191735;
+      --line:#242138;
+      --line-light:#2f2b4a;
+      --text:#F1EEFF;
+      --text-secondary:#B9B4D9;
+      --muted:#9A95BA;
+      --brand:#8B5CF6;
+      --brand-hover:#7C3AED;
+      --brand-glow:rgba(139, 92, 246, 0.35);
+      --success:#22D3A8;
+      --blue:#A78BFA;
+      --danger:#ef4444;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --shadow-sm: 0 4px 16px rgba(0,0,0,.25);
+      --shadow-md: 0 10px 30px rgba(0,0,0,.35);
+      --shadow-lg: 0 16px 50px rgba(0,0,0,.45);
+      --transition: .2s ease;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
+    html, body {
+      background: radial-gradient(1200px 800px at 0% 0%, var(--bg-grad1) 0%, transparent 60%),
+                  radial-gradient(1000px 700px at 100% 100%, var(--bg-grad2) 0%, transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      font-family: 'Montserrat', 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      line-height: 1.5;
+    }
+
+    h1, h2, h3 { letter-spacing: -.02em; }
+    p { color: var(--text-secondary); }
+
+    /* Links gerais */
+    a { color: inherit; text-decoration: none; transition: color var(--transition), opacity var(--transition); }
+    a:hover { opacity: .9; }
+
+    /* Campo de busca da Home */
+    #q {
+      background: var(--panel) !important;
+      color: var(--text) !important;
+      border: 1px solid var(--line) !important;
+      border-radius: var(--radius-md);
+      transition: box-shadow var(--transition), border-color var(--transition), transform var(--transition);
+    }
+    #q:focus { box-shadow: 0 0 0 3px var(--brand-glow); border-color: var(--brand) !important; transform: translateY(-1px); }
+
+    /* Botões (ancoras/links com classe btn) */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--line-light);
+      background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.08));
+      color: var(--text);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition), opacity var(--transition);
+      will-change: transform;
+    }
+    .btn:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.18); box-shadow: 0 8px 20px rgba(0,0,0,.3); }
+    .btn:active { transform: translateY(0); box-shadow: none; }
+    .btn:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+    .btn.ghost { background: rgba(255,255,255,0.06); }
+    .btn.fav.active { background: linear-gradient(135deg, var(--brand), var(--brand-hover)); box-shadow: 0 12px 26px var(--brand-glow); }
+
+    /* Cabeçalho fixo */
+    .sticky { backdrop-filter: blur(16px); box-shadow: 0 1px 0 rgba(255,255,255,0.06); }
+    .brand { letter-spacing: -.5px; }
+
+    /* Chips / marcadores */
+    .chip {
+      background: linear-gradient(135deg, rgba(255,255,255,0.03), rgba(255,255,255,0.06));
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      color: #c9c6de;
+    }
+
+    /* Painéis */
+    .panel {
+      background: rgba(15,15,26,0.7);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-sm);
+    }
+    .panel.elev { box-shadow: var(--shadow-md); }
+
+    /* Inputs e textareas */
+    .input, textarea.input {
+      background: rgba(20,20,30,0.7) !important;
+      color: var(--text) !important;
+      border: 1px solid rgba(255,255,255,0.08) !important;
+      border-radius: var(--radius-md) !important;
+      transition: border-color var(--transition), box-shadow var(--transition);
+    }
+    .input:focus, textarea.input:focus { border-color: var(--brand) !important; box-shadow: 0 0 0 3px var(--brand-glow); outline: none; }
+
+    /* Lista de comentários */
+    .c-list li { transition: transform var(--transition), box-shadow var(--transition); }
+    .c-list li:hover { transform: translateY(-2px); box-shadow: var(--shadow-sm); }
+
+    /* Cartões de vídeo (home) */
+    a.card { background: var(--panel) !important; border:1px solid var(--line) !important; color: var(--text) !important; border-radius: 14px; transition: transform var(--transition), box-shadow var(--transition); }
+    a.card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md), 0 0 60px var(--brand-glow); }
+    a.card > div:first-child { background: var(--panel-2) !important; }
+    a.card .title { color: var(--text) !important; }
+    a.card div span:first-child { color: var(--text-secondary) !important; }
+    a.card div span:last-child { background: var(--brand) !important; color:#fff !important; border-radius: 999px; box-shadow: 0 8px 22px var(--brand-glow); }
+
+    /* Links do header na home */
+    header a {
+      background: linear-gradient(135deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.1) 100%) !important;
+      color: var(--text) !important;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius-md);
+      transition: transform var(--transition), background var(--transition), border-color var(--transition);
+    }
+    header a:hover { transform: translateY(-1px); border-color: rgba(255,255,255,0.16); }
+
+    /* CTA do herói */
+    a[href="#grid"] { background: var(--brand) !important; color: var(--text) !important; border-radius: var(--radius-md); box-shadow: 0 8px 20px var(--brand-glow); }
+
+  </style>
 </head>
 <body>
 <header th:fragment="header"></header>
 <footer th:fragment="footer">
-  <p>FastDev © 2025 - Todos os direitos reservados</p>
-</footer>
+  <p>CodeMy 2025 - Todos os direitos reservados</p>
+  </footer>
 </body>
 </html>
+
