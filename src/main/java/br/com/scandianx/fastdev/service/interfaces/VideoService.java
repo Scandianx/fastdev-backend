@@ -12,9 +12,4 @@ public interface VideoService {
     VideoAbstrato criarVideo(VideoRequestDTO dto);
     List<VideoAbstrato> listarPermitidos(HttpServletRequest request);
     List<VideoAbstrato> listarTodos();
-    List<VideoAbstrato> listarPermitidosPorTitulo(String q, HttpServletRequest request);
-    List<VideoAbstrato> listarMaisFavoritados(int limit, HttpServletRequest request);
-    VideoAbstrato atualizarVideo(Long id, VideoRequestDTO dto);
-    void deletarVideo(Long id);
-    VideoAbstrato obterPorId(Long id);
 }
