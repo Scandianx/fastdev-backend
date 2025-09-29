@@ -69,7 +69,8 @@ public class AuthenticationServiceImpl implements AuthenticationService{
         observadores.forEach(obs -> obs.notificarNovoUsuario(visualizador));
         visualizadorRepository.save(visualizador);
 
-        return ResponseEntity.ok().body("Você foi cadastrado com sucesso!");
+        java.net.URI location = java.net.URI.create("/api/v1/usuarios/" + visualizador.getId());
+        return ResponseEntity.created(location).body("Usuário cadastrado com sucesso!");
     }
    
 }

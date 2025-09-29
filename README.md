@@ -1,292 +1,106 @@
-# FastDev Backend
 
-[PT-BR](#pt-br) • [EN](#en)
+## FastDev (Codemy) Backend
 
----
+API REST em Spring Boot para autenticação (JWT), vídeos, comentários e favoritos, com controle de acesso por nível e papéis.
 
-## PT-BR
+- Swagger UI: http://localhost:8083/swagger-ui/index.html
+- OpenAPI JSON: http://localhost:8083/v3/api-docs
 
-### Visão Geral
-FastDev Backend é uma API REST em Java com Spring Boot para autenticação, gestão de vídeos e comentários, com controle de acesso baseado em níveis. O objetivo é entregar uma base sólida, escalável e segura para aplicações web e mobile.
+Obs.: a porta pode variar conforme `server.port`.
 
-### Principais Recursos
-- Autenticação com JWT
-- Cadastro e listagem de vídeos
-- Comentários por vídeo
-- Validações com Jakarta Bean Validation
-- Estrutura em camadas (controller, service, repository, entity, dto)
-- CORS habilitado
-
-### Stack
-- Java 21
-- Spring Boot 3.x
-- Spring Web, Spring Security, Validation
-- JPA/Hibernate
-- Banco relacional compatível com PostgreSQL, Oracle ou H2
-- Maven
-
-### Clonar o Repositório
-```bash
-git clone https://github.com/Scandianx/fastdev-backend
-cd fastdev-backend
-```
-
-### Pré-requisitos
-- JDK 21
+### Requisitos
+- Java 17
 - Maven 3.9+
-- Banco de dados rodando (ex.: PostgreSQL) ou H2 para desenvolvimento
+- PostgreSQL 13+ (ou compatível)
 
-### Configuração de Ambiente
-Crie variáveis de ambiente ou um arquivo `application.properties`/`application-dev.properties` com:
+### Configuração de ambiente
+Crie `src/main/resources/application.properties` (ou exporte variáveis de ambiente). Exemplo PostgreSQL:
 
 ```properties
-server.port=8080
-spring.datasource.url=jdbc:postgresql://localhost:5432/fastdev
-spring.datasource.username=fastdev
-spring.datasource.password=fastdev
+server.port=8083
+spring.datasource.url=jdbc:postgresql://localhost:5432/fastdevdb
+spring.datasource.username=postgres
+spring.datasource.password=postgres
+spring.datasource.driver-class-name=org.postgresql.Driver
 spring.jpa.hibernate.ddl-auto=update
-spring.jpa.properties.hibernate.jdbc.time_zone=UTC
-api.security.token.secret=defina-um-segredo-forte
+api.security.token.secret=${JWT_SECRET:change-me}
+
+# Swagger
+springdoc.swagger-ui.path=/swagger-ui
+springdoc.api-docs.enabled=true
+springdoc.swagger-ui.enabled=true
+springdoc.override-with-generic-response=false
+springdoc.paths-to-match=/api/**
 ```
 
-Para Oracle, ajuste o `spring.datasource.url` e o driver conforme necessário.
+Variáveis úteis:
+- `JWT_SECRET`: segredo do JWT
+- `SERVER_PORT`: para alterar a porta (ou ajuste `server.port`)
 
-### Subir PostgreSQL com Docker (opcional)
-```yaml
-services:
-  db:
-    image: postgres:16
-    environment:
-      - POSTGRES_DB=fastdev
-      - POSTGRES_USER=fastdev
-      - POSTGRES_PASSWORD=fastdev
-    ports:
-      - "5432:5432"
-    volumes:
-      - fastdev_data:/var/lib/postgresql/data
-volumes:
-  fastdev_data:
-```
-
-### Executar em Desenvolvimento
+### Rodando local
 ```bash
 mvn spring-boot:run
 ```
 
-### Build de Produção
+Build do jar:
 ```bash
 mvn -DskipTests package
-java -jar target/fastdev-backend.jar
+java -jar target/fastdev-0.0.1-SNAPSHOT.jar
 ```
 
-### Testes
-```bash
-mvn test
-```
+### Segurança e papéis
+- `/api/v1/**` exige autenticação, exceto:
+  - `POST /api/v1/auth/login`
+  - `POST /api/v1/auth/register-visualizador`
+- Apenas ADMIN pode: `POST|PUT|DELETE /api/v1/videos/**` e `PATCH|DELETE /api/v1/usuarios/**`.
+- Use o botão Authorize (Swagger UI) e informe o token (sem o prefixo Bearer; o Swagger adiciona).
 
-### Perfis
-```bash
-mvn spring-boot:run -Dspring-boot.run.profiles=dev
-```
+### Contas seed (criado no startup)
+- ADMIN: `admin@admin` / senha: `admin@admin`
+- ADMIN: `scandianidev@gmail.com` / senha: `scandianidev@gmail.com`
 
-### Endpoints
-#### Autenticação
-`POST /auth/login`  
-Body:
+### Dados iniciais de vídeos
+No startup são criados até 10 vídeos (se não existirem pelos títulos) com a URL:
+`https://youtube.com/watch?v=E96YS8IQSHs` 
+Níveis: `FREE`, `BRLDEV`, `USDEV`, `PRIVATE`.
+
+### Autenticação
+1) Login
+```http
+POST /api/v1/auth/login
+Content-Type: application/json
+
+{ "login": "admin@admin", "password": "admin@admin" }
+```
+Resposta:
 ```json
-{
-  "login": "user",
-  "password": "minha-senha"
-}
+{ "token": "<JWT>" }
 ```
-Resposta 200:
-```json
-{
-  "token": "jwt"
-}
-```
+2) Usar o token: Header `Authorization: Bearer <JWT>`.
 
-`POST /auth/register-visualizador`  
-Body:
-```json
-{
-  "nome": "Filipe",
-  "login": "user",
-  "password": "minha-senha",
-  "nomeCompleto": "Filipe Scandiani",
-  "telefone": "(22) 99999-0000"
-}
-```
+### Exemplos de endpoints
+- Listar permitidos: `GET /api/v1/videos`
+- Buscar por título: `GET /api/v1/videos/search?titulo=java`
+- Top favoritos: `GET /api/v1/videos/top?limit=10`
+- Obter por id: `GET /api/v1/videos/{id}`
+- Favoritar: `POST /api/v1/favoritos/{videoId}`
+- Comentários do vídeo: `GET /api/v1/videos/{id}/comentarios`
+- Comentar: `POST /api/v1/videos/{id}/comentarios` (JSON `{"texto":"..."}`)
 
-#### Vídeos
-`POST /videos`  
-Header: `Authorization: Bearer {jwt}`  
-Body:
-```json
-{
-  "tipo": "youtube",
-  "url": "https://www.youtube.com/watch?v=xxxxx",
-  "titulo": "Introdução",
-  "descricao": "Primeiro vídeo",
-  "nivelAcesso": "BASICO"
-}
-```
+### Front-end (páginas)
+- `/auth-web`: login/cadastro (salva `fastdev_token` no localStorage)
+- `/web`: home
+- `/web/video?id=...`: assistir vídeo (todas as chamadas usam Authorization)
 
-`GET /videos`  
-Retorna a lista de vídeos permitidos para o usuário autenticado.
 
-#### Comentários
-`POST /comentarios/{videoId}`  
-Header: `Authorization: Bearer {jwt}`  
-Body:
-```json
-{
-  "texto": "Excelente conteúdo"
-}
-```
-
-### Autenticação e Segurança
-- Login retorna um JWT
-- Envie o token no header `Authorization` no formato `Bearer jwt`
-- O controle de acesso utiliza níveis em `nivelAcesso`
-
-### Validações de Entrada
-Os DTOs utilizam anotações como `@NotBlank`, `@Size`, `@Pattern`, `@URL` e `@NotNull`. Requisições inválidas retornam 400 com corpo padronizado.
-
-Exemplo de erro 400:
-```json
-{
-  "status": 400,
-  "error": "Bad Request",
-  "path": "/videos",
-  "timestamp": "2025-09-01T00:00:00Z",
-  "errors": [
-    { "field": "titulo", "message": "título obrigatório" }
-  ]
-}
-```
-
-### Estrutura de Pastas Sugerida
-```
-src/main/java/br/com/scandianx/fastdev/
-  config/
-  controller2/
-  dto/
-  entity/
-  repository/
-  service/
-  service/interfaces/
-src/main/resources/
-  application.properties
-  application-dev.properties
-```
-
-### Convenções de Commit
-- Conventional Commits
-- Mensagens curtas e imperativas
 
 ### Troubleshooting
-- Erro de conexão: verifique `spring.datasource.*`
-- 401: verifique o header `Authorization`
-- Erros 400: valide os campos do JSON enviado
+- 401/403 no Swagger: clique em Authorize e informe o JWT.
+- 404 em vídeo: confirme o `id` e o nível de acesso do usuário.
+- Conexão DB: verifique `spring.datasource.*` e permissões.
 
-### Roadmap
-- Paginação de vídeos
-- Soft delete de comentários
-- Upload de thumbnails
-
-### Licença
-Definir licença do projeto no repositório.
-
----
-## 📐 Diagrama de Classes
-
-![Diagrama de Classes](Docs/Plataforma%20de%20Streaming%20de%20cursos/diagrama-de-classes.png)
-
-## EN
-
-### Overview
-FastDev Backend is a Java Spring Boot REST API for authentication, video management and comments, with access control based on levels. It targets a secure, scalable foundation for web and mobile apps.
-
-### Key Features
-- JWT authentication
-- Video create and list
-- Per-video comments
-- Jakarta Bean Validation
-- Layered architecture
-- CORS enabled
-
-### Stack
-- Java 21
-- Spring Boot 3.x
-- Spring Web, Spring Security, Validation
-- JPA/Hibernate
-- PostgreSQL, Oracle or H2
-- Maven
-
-### Clone
-```bash
-git clone https://github.com/Scandianx/fastdev-backend
-cd fastdev-backend
-```
-
-### Requirements
-- JDK 21
-- Maven 3.9+
-- Database running or H2 for development
-
-### Environment
-```properties
-server.port=8080
-spring.datasource.url=jdbc:postgresql://localhost:5432/fastdev
-spring.datasource.username=fastdev
-spring.datasource.password=fastdev
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.properties.hibernate.jdbc.time_zone=UTC
-api.security.token.secret=define-a-strong-secret
-```
-
-### Run Dev
-```bash
-mvn spring-boot:run
-```
-
-### Build
-```bash
-mvn -DskipTests package
-java -jar target/fastdev-backend.jar
-```
-
-### Tests
-```bash
-mvn test
-```
-
-### Endpoints
-Auth
-```http
-POST /auth/login
-```
-Videos
-```http
-POST /videos
-GET /videos
-```
-Comments
-```http
-POST /comentarios/{videoId}
-```
-
-### Error Example
-```json
-{
-  "status": 400,
-  "error": "Bad Request",
-  "path": "/videos",
-  "timestamp": "2025-09-01T00:00:00Z",
-  "errors": [
-    { "field": "titulo", "message": "título obrigatório" }
-  ]
-}
-```
-
+### Principais dependências
+- Spring Boot 3.4.4 (Web, Security, Validation, Data JPA, Thymeleaf)
+- springdoc-openapi-starter-webmvc-ui (Swagger UI)
+- PostgreSQL driver
+- Auth0 Java JWT

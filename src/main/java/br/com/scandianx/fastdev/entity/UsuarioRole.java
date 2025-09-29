@@ -2,8 +2,8 @@ package br.com.scandianx.fastdev.entity;
 
 public enum UsuarioRole {
     ADMIN("admin"),
-    GRINGADEV("gringadev"),
-    BRDEV("brdev"),
+    USDEV("usdev"),
+    BRLDEV("brldev"),
     USER("user");
 
     private String role;
