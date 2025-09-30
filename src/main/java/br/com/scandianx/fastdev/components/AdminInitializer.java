@@ -31,14 +31,14 @@ public class AdminInitializer {
             visualizadorRepository.save(admin);
         }
         if (usuarioRepository.findByLogin("scandianidev@gmail.com") == null) {
-            String senhaCriptografada = new BCryptPasswordEncoder().encode("gmail");
+            String senhaCriptografada = new BCryptPasswordEncoder().encode("scandianidev@gmail.com");
             Visualizador admin2 = new Visualizador();
             admin2.setLogin("scandianidev@gmail.com");
             admin2.setNome("Scandiani");
             admin2.setNomeCompleto("Scandiani Dev");
             admin2.setPassword(senhaCriptografada);
             admin2.setTelefone("0000000000");
-            admin2.setRole(UsuarioRole.ADMIN);
+            admin2.setRole(UsuarioRole.USDEV);
             visualizadorRepository.save(admin2);
         }
     }

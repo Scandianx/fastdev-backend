@@ -14,13 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/auth-web")
 public class AuthWebController {
 
     @Autowired
     private AuthenticationService authenticationService;
 
-    @GetMapping
+    @GetMapping("/")
     public String showAuthPage(Model model) {
         model.addAttribute("registerDTO", new RegisterDTO());
         model.addAttribute("loginDTO", new AuthenticationDTO());
